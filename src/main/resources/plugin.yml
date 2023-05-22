@@ -1,0 +1,12 @@
+name: Display
+version: '${project.version}'
+main: me.itzisonn_.display.Display
+api-version: 1.19
+author: ItzIsonn_
+description: 'Простое создание сущностей display'
+
+commands:
+  display:
+    description: Interaction with display entities
+    permission: display.usecmd
+    usage: '§сНеверное использование! Помощь: /display help'

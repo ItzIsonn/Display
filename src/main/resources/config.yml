@@ -1,0 +1,45 @@
+#Конфигурация плагина Display
+
+#Сообщения
+#Используйте {prefix} для префикса перед сообщением
+#Используйте {help} для команды показа помощи
+#Используйте {subcommands} для списка действий команды (указаны в help)
+#Используйте {amount} для количества аргументов
+#Используйте {types} для списка типов display сущностей
+#Используйте {id} для указания id объекта
+#Используйте {x}, {y}, {z}, {world} для координат и мира
+messages:
+  prefix: "&#898989[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#898989]&r"
+  all:
+    onlyPlayerConsole: "&cКоманду может выполнять только игрок!"
+    notFull: "{prefix} &cНеполная команда! Список команд: {help}"
+    unknownAction: "{prefix} &cНеизвестный тип действия! Используйте: {subcommands}"
+    tooManyArguments: "{prefix} &cСлишком много аргументов!"
+  createCommand:
+    notFoundObjectType: "{prefix} &cНе найден тип объекта! Используйте: {types}"
+    unknownObjectType: "{prefix} &cНеизвестный тип объекта! Используйте: {types}"
+    notFoundId: "{prefix} &cНе найден ID объекта! Используйте любое натуральное число, не использовавшееся раньше"
+    invalidId: "{prefix} &cID объекта должен быть числом! Используйте любое натуральное число, не использовавшееся раньше"
+    idAlreadyInUse: "{prefix} &cID {id} уже используется! Попробуйте другой"
+    successfullyCreated: "{prefix} &aОбъект для отображения с ID {id} успешно создан!"
+  editCommand:
+    notFoundEditType: "{prefix} &cНе найден тип редактирования! Используйте: {types}"
+    unknownEditType: "{prefix} &cНеизвестный тип редактирования! Используйте: {types}"
+    notFoundBlock: "{prefix} &cНе найден тип блока! Используйте существующий блок"
+    unknownBlock: "{prefix} &cНеизвестный блок! Используйте существующий блок"
+    notFoundItem: "{prefix} &cНе найден тип предмета! Используйте существующий предмет"
+    unknownItem: "{prefix} &cНеизвестный предмет! Используйте существующий предмет"
+    successfullyEdited: "{prefix} &aУ объекта с ID {id} успешно изменён параметр {edittype} на {value}"
+  tpcoordsCommand:
+    notFoundDimension: "{prefix} &cНе найдено измерение! Используйте: {types}"
+    unknownDimension: "{prefix} &cНеизвестное измерение! Используйте: {types}"
+    notFoundCoords: "{prefix} &cНе найдены координаты! Используйте формат Double"
+    invalidCoords: "{prefix} &cНеверный формат координат! Используйте формат Double"
+    successfullyTpcoords: "{prefix} &aОбъект с ID {id} успешно перемещён на координаты {x} {y} {z} в мире {world}"
+  other:
+    notFoundId: "{prefix} &cНе найден ID объекта! Используйте существующий ID объекта"
+    invalidId: "{prefix} &cID объекта должен быть числом! Используйте существующий ID объекта"
+    idDoesNotExist: "{prefix} &cОбъекта с ID {id} не существует!"
+    successfullyDeleted: "{prefix} &aОбъект с ID {id} успешно удалён!"
+    successfullyTphere: "{prefix} &aОбъект с ID {id} успешно перемещён на ваши координаты!"
+    successfullyTpto: "{prefix} &aВы были успешно перемещены на координаты объекта с ID {id}!"
