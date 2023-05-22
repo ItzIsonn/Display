@@ -18,16 +18,17 @@ public class Actions {
     private static final HashMap<Integer, Entity> displays = Storage.getDisplays();
 
     public static void sendHelp() {
-        player.sendMessage(useHex("&#898989[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#898989] &#fb630eПомощь по команде /display"));
-        player.sendMessage(useHex("&#fdd134/display help &8- &#d0d0d0Показать помощь"));
-        player.sendMessage(useHex("&#fdd134/display create [block | item] <id> &8- &#d0d0d0Создать объект для отображения"));
-        player.sendMessage(useHex("&#fdd134/display delete <id> &8- &#d0d0d0Удалить объект с указанным ID"));
-        player.sendMessage(useHex("&#fdd134/display edit <id> ... &8- &#d0d0d0Изменить параметры у объекта с указанным ID"));
-        player.sendMessage(useHex("  &#fcac27• blocktype (itemtype) <type> &8- &#d0d0d0Изменить тип блока (предмета)"));
-        player.sendMessage(useHex("  &#fcac27• glowing &8- &#d0d0d0Изменить подсветку на противоположное значение"));
-        player.sendMessage(useHex("&#fdd134/display tphere <id> &8- &#d0d0d0Переместить объект с указанным ID на координаты исполнителя"));
-        player.sendMessage(useHex("&#fdd134/display tpcoords <id> <world> <x> <y> <z> &8- &#d0d0d0Переместить объект с указанным ID на укзанные координаты"));
-        player.sendMessage(useHex("&#fdd134/display tpto <id> &8- &#d0d0d0Переместить исполнителя на координаты объекта с указанным ID"));
+        player.sendMessage(useHex("&#6d6d6d[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#6d6d6d] &#fc881bПомощь по команде /display"));
+        player.sendMessage(useHex("&#fdd134/display help &8- &#a5a5a5Показать помощь"));
+        player.sendMessage(useHex("&#fdd134/display create [block | item] <id> &8- &#a5a5a5Создать объект для отображения"));
+        player.sendMessage(useHex("&#fdd134/display delete <id> &8- &#a5a5a5Удалить объект с указанным ID"));
+        player.sendMessage(useHex("&#fdd134/display edit <id> ... &8- &#a5a5a5Изменить параметры у объекта с указанным ID"));
+        player.sendMessage(useHex("  &#fcac27• blocktype (itemtype) <type> &8- &#a5a5a5Изменить тип блока (предмета)"));
+        player.sendMessage(useHex("  &#fcac27• glowing &8- &#a5a5a5Изменить подсветку на противоположное значение"));
+        player.sendMessage(useHex("&#fdd134/display tpcoords <id> <world> <x> <y> <z> &8- &#a5a5a5Переместить объект с указанным ID на указанные координаты"));
+        player.sendMessage(useHex("&#fdd134/display tphere <id> &8- &#a5a5a5Переместить объект с указанным ID на координаты исполнителя"));
+        player.sendMessage(useHex("&#fdd134/display tpto <id> &8- &#a5a5a5Переместить исполнителя на координаты объекта с указанным ID"));
+        player.sendMessage(useHex("&#fdd134/display changeid <id> <newid> &8- &#a5a5a5Изменить ID у объекта с указанным ID на новый"));
     }
 
     public static void createObject(Integer displayID, EntityType type) {
@@ -132,6 +133,20 @@ public class Actions {
             Location location = new Location(entity.getWorld(), entity.getLocation().getX(), entity.getLocation().getY() - 0.5, entity.getLocation().getZ());
             player.teleport(location);
         }
+    }
+
+    public static void changeID(Integer displayID, Integer newID) {
+        Entity entity = displays.get(displayID);
+        displays.remove(displayID);
+
+        displays.put(newID, entity);
+
+        NamespacedKey namespacedKey = new NamespacedKey(Display.getInstance(), "displayUUID");
+        PersistentDataContainer data = entity.getPersistentDataContainer();
+        String displayUUID = data.get(namespacedKey, PersistentDataType.STRING);
+
+        Storage.getConfig().set("displayEntities." + displayUUID + ".id", newID);
+        Display.getData().save();
     }
 
 

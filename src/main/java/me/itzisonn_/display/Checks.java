@@ -31,36 +31,36 @@ public class Checks {
                             int displayID = Integer.parseInt(args[2]);
 
                             if (!(displays.containsKey(displayID))) {
-                                player.sendMessage(Config.getMsg("messages.createCommand.successfullyCreated", String.valueOf(displayID)));
+                                player.sendMessage(Config.getMsg("messages.successfully.created", String.valueOf(displayID)));
                                 return true;
                             }
                             else {
-                                player.sendMessage(Config.getMsg("messages.createCommand.idAlreadyInUse", String.valueOf(displayID)));
+                                player.sendMessage(Config.getMsg("messages.errors.idAlreadyInUse", String.valueOf(displayID)));
                                 return false;
                             }
                         }
                         else {
-                            player.sendMessage(Config.getMsg("messages.createCommand.invalidId", null));
+                            player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
                             return false;
                         }
                     }
                     else {
-                        player.sendMessage(Config.getMsg("messages.createCommand.notFoundId", null));
+                        player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
                         return false;
                     }
                 }
                 else {
-                    player.sendMessage(Config.getMsg("messages.createCommand.unknownObjectType", null));
+                    player.sendMessage(Config.getMsg("messages.errors.unknownObjectType", null));
                     return false;
                 }
             }
             else {
-                player.sendMessage(Config.getMsg("messages.createCommand.notFoundObjectType", null));
+                player.sendMessage(Config.getMsg("messages.errors.notFoundObjectType", null));
                 return false;
             }
         }
         else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
             return false;
         }
     }
@@ -73,26 +73,26 @@ public class Checks {
                     Entity entity = displays.get(displayID);
 
                     if (displays.containsKey(displayID) && !entity.isDead()) {
-                        player.sendMessage(Config.getMsg("messages.other.successfullyDeleted", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.successfully.deleted", String.valueOf(displayID)));
                         return true;
                     }
                     else {
-                        player.sendMessage(Config.getMsg("messages.other.idDoesNotExist", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
                         return false;
                     }
                 }
                 else {
-                    player.sendMessage(Config.getMsg("messages.other.invalidId", null));
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
                     return false;
                 }
             }
             else {
-                player.sendMessage(Config.getMsg("messages.other.notFoundId", null));
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
                 return false;
             }
         }
         else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
             return false;
         }
     }
@@ -112,21 +112,21 @@ public class Checks {
                                         if (Material.getMaterial(args[3].toUpperCase()) != null && Objects.requireNonNull(Material.getMaterial(args[3].toUpperCase())).isBlock() && Material.getMaterial(args[3].toUpperCase()) != Material.AIR) {
                                             edittype = args[2];
                                             value = args[3];
-                                            player.sendMessage(Config.getMsg("messages.editCommand.successfullyEdited", String.valueOf(displayID)));
+                                            player.sendMessage(Config.getMsg("messages.successfully.edited", String.valueOf(displayID)));
                                             return true;
                                         }
                                         else {
-                                            player.sendMessage(Config.getMsg("messages.editCommand.unknownBlock", null));
+                                            player.sendMessage(Config.getMsg("messages.errors.unknownBlock", null));
                                             return false;
                                         }
                                     }
                                     else {
-                                        player.sendMessage(Config.getMsg("messages.editCommand.notFoundBlock", null));
+                                        player.sendMessage(Config.getMsg("messages.errors.notFoundBlock", null));
                                         return false;
                                     }
                                 }
                                 else if (!args[2].equalsIgnoreCase("glowing")) {
-                                    player.sendMessage(Config.getMsg("messages.editCommand.unknownEditType", null));
+                                    player.sendMessage(Config.getMsg("messages.errors.unknownEditType", null));
                                     return false;
                                 }
                             }
@@ -137,27 +137,27 @@ public class Checks {
                                         if (Material.getMaterial(args[3].toUpperCase()) != null && !Objects.requireNonNull(Material.getMaterial(args[3].toUpperCase())).isBlock()) {
                                             edittype = args[2];
                                             value = args[3];
-                                            player.sendMessage(Config.getMsg("messages.editCommand.successfullyEdited", String.valueOf(displayID)));
+                                            player.sendMessage(Config.getMsg("messages.successfully.edited", String.valueOf(displayID)));
                                             return true;
                                         }
                                         else {
-                                            player.sendMessage(Config.getMsg("messages.editCommand.unknownItem", null));
+                                            player.sendMessage(Config.getMsg("messages.errors.unknownItem", null));
                                             return false;
                                         }
                                     }
                                     else {
-                                        player.sendMessage(Config.getMsg("messages.editCommand.notFoundItem", null));
+                                        player.sendMessage(Config.getMsg("messages.errors.notFoundItem", null));
                                         return false;
                                     }
                                 }
                                 else if (!args[2].equalsIgnoreCase("glowing")) {
-                                    player.sendMessage(Config.getMsg("messages.editCommand.unknownEditType", null));
+                                    player.sendMessage(Config.getMsg("messages.errors.unknownEditType", null));
                                     return false;
                                 }
                             }
                         }
                         else {
-                            player.sendMessage(Config.getMsg("messages.editCommand.notFoundEditType", null));
+                            player.sendMessage(Config.getMsg("messages.errors.notFoundEditType", null));
                             return false;
 
                         }
@@ -166,67 +166,35 @@ public class Checks {
                             if (args.length == 3) {
                                 edittype = args[2];
                                 value = String.valueOf(!entity.isGlowing());
-                                player.sendMessage(Config.getMsg("messages.editCommand.successfullyEdited", String.valueOf(displayID)));
+                                player.sendMessage(Config.getMsg("messages.successfully.edited", String.valueOf(displayID)));
                                 return true;
                             }
                             else {
-                                player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+                                player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
                                 return false;
                             }
                         }
                     }
                     else {
-                        player.sendMessage(Config.getMsg("messages.other.idDoesNotExist", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
                         return false;
                     }
                 }
                 else {
-                    player.sendMessage(Config.getMsg("messages.other.invalidId", null));
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
                     return false;
                 }
             }
             else {
-                player.sendMessage(Config.getMsg("messages.other.notFoundId", null));
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
                 return false;
             }
         }
         else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
             return false;
         }
         return false;
-    }
-
-    public static boolean checkTphere(String[] args) {
-        if (args.length <= 2) {
-            if (args.length == 2) {
-                if (Checks.isInt(args[1])) {
-                    int displayID = Integer.parseInt(args[1]);
-                    Entity entity = displays.get(displayID);
-
-                    if (displays.containsKey(displayID) && !entity.isDead()) {
-                        player.sendMessage(Config.getMsg("messages.other.successfullyTphere", String.valueOf(displayID)));
-                        return true;
-                    }
-                    else {
-                        player.sendMessage(Config.getMsg("messages.other.idDoesNotExist", String.valueOf(displayID)));
-                        return false;
-                    }
-                }
-                else {
-                    player.sendMessage(Config.getMsg("messages.other.invalidId", null));
-                    return false;
-                }
-            }
-            else {
-                player.sendMessage(Config.getMsg("messages.other.notFoundId", null));
-                return false;
-            }
-        }
-        else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
-            return false;
-        }
     }
 
     public static boolean checkTpcoords(String[] args) {
@@ -245,46 +213,78 @@ public class Checks {
                                         y = args[4];
                                         z = args[5];
                                         world = args[2];
-                                        player.sendMessage(Config.getMsg("messages.tpcoordsCommand.successfullyTpcoords", String.valueOf(displayID)));
+                                        player.sendMessage(Config.getMsg("messages.successfully.teleportedCoords", String.valueOf(displayID)));
                                         return true;
                                     }
                                     else {
-                                        player.sendMessage(Config.getMsg("messages.tpcoordsCommand.invalidCoords", null));
+                                        player.sendMessage(Config.getMsg("messages.errors.invalidCoords", null));
                                         return false;
                                     }
                                 }
                                 else {
-                                    player.sendMessage(Config.getMsg("messages.tpcoordsCommand.notFoundCoords", null));
+                                    player.sendMessage(Config.getMsg("messages.errors.notFoundCoords", null));
                                     return false;
                                 }
                             }
                             else {
-                                player.sendMessage(Config.getMsg("messages.tpcoordsCommand.unknownDimension", null));
+                                player.sendMessage(Config.getMsg("messages.errors.unknownDimension", null));
                                 return false;
                             }
                         }
                         else {
-                            player.sendMessage(Config.getMsg("messages.tpcoordsCommand.notFoundDimension", null));
+                            player.sendMessage(Config.getMsg("messages.errors.notFoundDimension", null));
                             return false;
                         }
                     }
                     else {
-                        player.sendMessage(Config.getMsg("messages.other.idDoesNotExist", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
                         return false;
                     }
                 }
                 else {
-                    player.sendMessage(Config.getMsg("messages.other.invalidId", null));
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
                     return false;
                 }
             }
             else {
-                player.sendMessage(Config.getMsg("messages.other.notFoundId", null));
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
                 return false;
             }
         }
         else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
+            return false;
+        }
+    }
+
+    public static boolean checkTphere(String[] args) {
+        if (args.length <= 2) {
+            if (args.length == 2) {
+                if (Checks.isInt(args[1])) {
+                    int displayID = Integer.parseInt(args[1]);
+                    Entity entity = displays.get(displayID);
+
+                    if (displays.containsKey(displayID) && !entity.isDead()) {
+                        player.sendMessage(Config.getMsg("messages.successfully.teleportedHere", String.valueOf(displayID)));
+                        return true;
+                    }
+                    else {
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
+                        return false;
+                    }
+                }
+                else {
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
+                    return false;
+                }
+            }
+            else {
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
+                return false;
+            }
+        }
+        else {
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
             return false;
         }
     }
@@ -297,32 +297,85 @@ public class Checks {
                     Entity entity = displays.get(displayID);
 
                     if (displays.containsKey(displayID) && !entity.isDead()) {
-                        player.sendMessage(Config.getMsg("messages.other.successfullyTpto", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.successfully.teleportedTo", String.valueOf(displayID)));
                         return true;
                     }
                     else {
-                        player.sendMessage(Config.getMsg("messages.other.idDoesNotExist", String.valueOf(displayID)));
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
                         return false;
                     }
                 }
                 else {
-                    player.sendMessage(Config.getMsg("messages.other.invalidId", null));
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
                     return false;
                 }
             }
             else {
-                player.sendMessage(Config.getMsg("messages.other.notFoundId", null));
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
                 return false;
             }
         }
         else {
-            player.sendMessage(Config.getMsg("messages.all.tooManyArguments", null));
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
+            return false;
+        }
+    }
+
+    public static boolean checkChangeID(String[] args) {
+        if (args.length <= 3) {
+            if (args.length >= 2) {
+                if (Checks.isInt(args[1])) {
+                    int displayID = Integer.parseInt(args[1]);
+                    Entity entity = displays.get(displayID);
+
+                    if (displays.containsKey(displayID) && !entity.isDead()) {
+                        if (args.length == 3) {
+                            if (isInt(args[2])) {
+                                newid = args[2];
+
+                                if (!(displays.containsKey(Integer.parseInt(newid)))) {
+                                    player.sendMessage(Config.getMsg("messages.successfully.changedID", String.valueOf(displayID)));
+                                    return true;
+                                }
+                                else {
+                                    player.sendMessage(Config.getMsg("messages.errors.idAlreadyInUse", String.valueOf(displayID)));
+                                    return false;
+                                }
+                            }
+                            else {
+                                player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
+                                return false;
+                            }
+                        }
+                        else {
+                            player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
+                            return false;
+                        }
+                    }
+                    else {
+                        player.sendMessage(Config.getMsg("messages.errors.idDoesNotExist", String.valueOf(displayID)));
+                        return false;
+                    }
+                }
+                else {
+                    player.sendMessage(Config.getMsg("messages.errors.invalidId", null));
+                    return false;
+                }
+            }
+            else {
+                player.sendMessage(Config.getMsg("messages.errors.notFoundId", null));
+                return false;
+            }
+        }
+        else {
+            player.sendMessage(Config.getMsg("messages.errors.tooManyArguments", null));
             return false;
         }
     }
 
 
 
+    private static String newid;
     private static String edittype;
     private static String value;
     private static String x;
@@ -330,6 +383,9 @@ public class Checks {
     private static String z;
     private static String world;
 
+    public static String getNewid() {
+        return newid;
+    }
     public static String getEdittype() {
         return edittype;
     }

@@ -3,13 +3,10 @@ package me.itzisonn_.display.command;
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.*;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -23,11 +20,11 @@ public class DisplayCommand extends AbstractCommand {
             player = (Player) sender;
         }
         else {
-            sender.sendMessage(Config.getMsg("messages.all.onlyPlayerConsole", null));
+            sender.sendMessage(Config.getMsg("messages.errors.onlyPlayerConsole", null));
         }
 
         if (args.length == 0) {
-            player.sendMessage(Config.getMsg("messages.all.notFull", null));
+            player.sendMessage(Config.getMsg("messages.errors.notFull", null));
         }
 
         else if (args[0].equalsIgnoreCase("help")) {
@@ -77,27 +74,20 @@ public class DisplayCommand extends AbstractCommand {
             }
         }
 
-        else if (args[0].equalsIgnoreCase("list")) {
-            player.sendMessage("" + displays);
-        }
-
-        else if (args[0].equalsIgnoreCase("uuid")) {
-            Entity display = displays.get(Integer.parseInt(args[1]));
-
-            NamespacedKey namespacedKey = new NamespacedKey(Display.getInstance(), "displayUUID");
-            PersistentDataContainer data = display.getPersistentDataContainer();
-            String displayUUID = data.get(namespacedKey, PersistentDataType.STRING);
-            player.sendMessage("" + displayUUID);
+        else if (args[0].equalsIgnoreCase("changeid")) {
+            if (Checks.checkChangeID(args)) {
+                Actions.changeID(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+            }
         }
 
         else {
-            player.sendMessage(Config.getMsg("messages.all.unknownAction", null));
+            player.sendMessage(Config.getMsg("messages.errors.unknownAction", null));
         }
     }
 
     @Override
     public ArrayList<String> complete(CommandSender sender, String[] args) {
-        if (args.length == 1) return Lists.newArrayList("help", "create", "delete", "edit", "tphere", "tpcoords", "tpto");
+        if (args.length == 1) return Lists.newArrayList("help", "create", "delete", "edit", "tphere", "tpcoords", "tpto", "changeid");
 
         if (args.length == 2 && args[0].equalsIgnoreCase("create")) return Lists.newArrayList("block", "item");
         if (args.length == 3 && args[0].equalsIgnoreCase("create")) return Lists.newArrayList("<id>");
@@ -129,6 +119,9 @@ public class DisplayCommand extends AbstractCommand {
         if (args.length == 6 && args[0].equalsIgnoreCase("tpcoords")) return Lists.newArrayList("<z>");
 
         if (args.length == 2 && args[0].equalsIgnoreCase("tpto")) return Lists.newArrayList(getIDs());
+
+        if (args.length == 2 && args[0].equalsIgnoreCase("changeid")) return Lists.newArrayList(getIDs());
+        if (args.length == 3 && args[0].equalsIgnoreCase("changeid")) return Lists.newArrayList("<id>");
 
         return Lists.newArrayList();
     }
