@@ -1,5 +1,6 @@
 package me.itzisonn_.display;
 
+import me.itzisonn_.display.command.DisplayCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -21,10 +22,14 @@ public class Config {
         }
         if (path.equals("messages.errors.unknownAction")) {
             msg = config.getString(path, "{prefix} &cНеизвестный тип действия! Используйте: {subcommands}");
-            msg = msg.replace("{subcommands}", "help | create | delete | edit | tphere | tpcoords | tpto | changeid");
+            msg = msg.replace("{subcommands}", String.valueOf(DisplayCommand.mainTabComplete())).replace(", ", " | ");
+            msg = msg.replace("{subcommands}", String.valueOf(DisplayCommand.mainTabComplete())).replace("[", "").replace("]", "");
         }
         if (path.equals("messages.errors.tooManyArguments")) {
             msg = config.getString(path, "{prefix} &cСлишком много аргументов!");
+        }
+        if (path.equals("messages.errors.noPermission")) {
+            msg = config.getString(path, "{prefix} &cУ вас нет прав на выполнение данной команды!");
         }
         if (path.equals("messages.errors.notFoundObjectType")) {
             msg = config.getString(path, "{prefix} &cНе найден тип объекта! Используйте: {types}");
@@ -85,8 +90,9 @@ public class Config {
 
 
         if (path.equals("messages.successfully.created")) {
-            msg = config.getString(path, "{prefix} &aОбъект для отображения с ID {id} успешно создан!");
+            msg = config.getString(path, "{prefix} &aОбъект для отображения с ID {id} и типом {type} успешно создан!");
             msg = msg.replace("{id}", replaceTo);
+            msg = msg.replace("{type}", Checks.getType());
         }
         if (path.equals("messages.successfully.deleted")) {
             msg = config.getString(path, "{prefix} &aОбъект с ID {id} успешно удалён!");
@@ -131,10 +137,10 @@ public class Config {
 
 
 
-    private static String useHex(String message) {
+    public static String useHex(String message) {
         Pattern pattern = Pattern.compile("(#[a-fA-F0-9]{6})");
         Matcher matcher = pattern.matcher(message);
-        
+
         while (matcher.find()) {
             String hexCode = message.substring(matcher.start(), matcher.end());
             String replaceSharp = hexCode.replace('#', 'x');

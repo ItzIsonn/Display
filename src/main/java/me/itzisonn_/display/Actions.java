@@ -10,25 +10,23 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Actions {
     private static final Player player = DisplayCommand.getPlayer();
     private static final HashMap<Integer, Entity> displays = Storage.getDisplays();
 
     public static void sendHelp() {
-        player.sendMessage(useHex("&#6d6d6d[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#6d6d6d] &#fc881bПомощь по команде /display"));
-        player.sendMessage(useHex("&#fdd134/display help &8- &#a5a5a5Показать помощь"));
-        player.sendMessage(useHex("&#fdd134/display create [block | item] <id> &8- &#a5a5a5Создать объект для отображения"));
-        player.sendMessage(useHex("&#fdd134/display delete <id> &8- &#a5a5a5Удалить объект с указанным ID"));
-        player.sendMessage(useHex("&#fdd134/display edit <id> ... &8- &#a5a5a5Изменить параметры у объекта с указанным ID"));
-        player.sendMessage(useHex("  &#fcac27• blocktype (itemtype) <type> &8- &#a5a5a5Изменить тип блока (предмета)"));
-        player.sendMessage(useHex("  &#fcac27• glowing &8- &#a5a5a5Изменить подсветку на противоположное значение"));
-        player.sendMessage(useHex("&#fdd134/display tpcoords <id> <world> <x> <y> <z> &8- &#a5a5a5Переместить объект с указанным ID на указанные координаты"));
-        player.sendMessage(useHex("&#fdd134/display tphere <id> &8- &#a5a5a5Переместить объект с указанным ID на координаты исполнителя"));
-        player.sendMessage(useHex("&#fdd134/display tpto <id> &8- &#a5a5a5Переместить исполнителя на координаты объекта с указанным ID"));
-        player.sendMessage(useHex("&#fdd134/display changeid <id> <newid> &8- &#a5a5a5Изменить ID у объекта с указанным ID на новый"));
+        player.sendMessage(Config.useHex("&#6d6d6d[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#6d6d6d] &#fc881bПомощь по команде /display"));
+        player.sendMessage(Config.useHex("&#fdd134/display help &8- &#a5a5a5Показать помощь"));
+        player.sendMessage(Config.useHex("&#fdd134/display create [block | item] <id> &8- &#a5a5a5Создать объект для отображения"));
+        player.sendMessage(Config.useHex("&#fdd134/display delete <id> &8- &#a5a5a5Удалить объект с указанным ID"));
+        player.sendMessage(Config.useHex("&#fdd134/display edit <id> ... &8- &#a5a5a5Изменить параметры у объекта с указанным ID"));
+        player.sendMessage(Config.useHex("  &#fcac27• blocktype (itemtype) <type> &8- &#a5a5a5Изменить тип блока (предмета)"));
+        player.sendMessage(Config.useHex("  &#fcac27• glowing &8- &#a5a5a5Изменить подсветку на противоположное значение"));
+        player.sendMessage(Config.useHex("&#fdd134/display tpcoords <id> <world> <x> <y> <z> &8- &#a5a5a5Переместить объект с указанным ID на указанные координаты"));
+        player.sendMessage(Config.useHex("&#fdd134/display tphere <id> &8- &#a5a5a5Переместить объект с указанным ID на координаты исполнителя"));
+        player.sendMessage(Config.useHex("&#fdd134/display tpto <id> &8- &#a5a5a5Переместить исполнителя на координаты объекта с указанным ID"));
+        player.sendMessage(Config.useHex("&#fdd134/display changeid <id> <newid> &8- &#a5a5a5Изменить ID у объекта с указанным ID на новый"));
     }
 
     public static void createObject(Integer displayID, EntityType type) {
@@ -147,26 +145,5 @@ public class Actions {
 
         Storage.getConfig().set("displayEntities." + displayUUID + ".id", newID);
         Display.getData().save();
-    }
-
-
-
-    private static String useHex(String message) {
-        Pattern pattern = Pattern.compile("(#[a-fA-F0-9]{6})");
-        Matcher matcher = pattern.matcher(message);
-        while (matcher.find()) {
-            String hexCode = message.substring(matcher.start(), matcher.end());
-            String replaceSharp = hexCode.replace('#', 'x');
-
-            char[] ch = replaceSharp.toCharArray();
-            StringBuilder builder = new StringBuilder();
-            for (char c : ch) {
-                builder.append("&").append(c);
-            }
-
-            message = message.replace(hexCode, builder.toString());
-            matcher = pattern.matcher(message);
-        }
-        return ChatColor.translateAlternateColorCodes('&', message).replace('&', '§');
     }
 }

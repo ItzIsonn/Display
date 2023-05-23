@@ -4,9 +4,10 @@
 #Используйте {prefix} для префикса перед сообщением
 #Используйте {help} для команды показа помощи
 #Используйте {subcommands} для списка действий команды (указаны в help)
+#Используйте {type} для указания типа объекта
 #Используйте {types} для списка типов display сущностей
-#Используйте {id} для указания id объекта
-#Используйте {x}, {y}, {z}, {world} для координат и мира
+#Используйте {id} и {newid} для указания id объекта
+#Используйте {x}, {y}, {z} и {world} для координат и мира
 messages:
   prefix: "&#6d6d6d[&#fdd134D&#fdbf2ei&#fcac27s&#fc9a21p&#fc881bl&#fb7514a&#fb630ey&#6d6d6d]&r"
   errors:
@@ -14,6 +15,7 @@ messages:
     notFull: "{prefix} &cНеполная команда! Список команд: {help}"
     unknownAction: "{prefix} &cНеизвестный тип действия! Используйте: {subcommands}"
     tooManyArguments: "{prefix} &cСлишком много аргументов!"
+    noPermission: "{prefix} &cУ вас нет прав на выполнение данной команды!"
     notFoundObjectType: "{prefix} &cНе найден тип объекта! Используйте: {types}"
     unknownObjectType: "{prefix} &cНеизвестный тип объекта! Используйте: {types}"
     notFoundId: "{prefix} &cНе найден ID объекта!"
@@ -31,7 +33,7 @@ messages:
     notFoundCoords: "{prefix} &cНе найдены координаты!"
     invalidCoords: "{prefix} &cНеверный формат координат!"
   successfully:
-    created: "{prefix} &aОбъект для отображения с ID {id} успешно создан!"
+    created: "{prefix} &aОбъект для отображения с ID {id} и типом {type} успешно создан!"
     deleted: "{prefix} &aОбъект с ID {id} успешно удалён!"
     edited: "{prefix} &aУ объекта с ID {id} успешно изменён параметр {edittype} на {value}!"
     teleportedCoords: "{prefix} &aОбъект с ID {id} успешно перемещён на координаты {x} {y} {z} в мире {world}!"

@@ -24,11 +24,13 @@ public class Events implements Listener {
             PersistentDataContainer data = entity.getPersistentDataContainer();
             String displayUUID = data.get(namespacedKey, PersistentDataType.STRING);
 
-            for (String stringUuid : Objects.requireNonNull(config.getConfigurationSection("displayEntities")).getKeys(false)) {
-                if (Objects.equals(stringUuid, displayUUID)) {
-                    int displayID = config.getInt("displayEntities." + stringUuid + ".id");
-                    displays.put(displayID, entity);
-                    Bukkit.getServer().getConsoleSender().sendMessage("[Display] Entity with ID " + displayID + " was downloaded!");
+            if (config.getConfigurationSection("displayEntities") != null) {
+                for (String stringUuid : Objects.requireNonNull(config.getConfigurationSection("displayEntities")).getKeys(false)) {
+                    if (Objects.equals(stringUuid, displayUUID)) {
+                        int displayID = config.getInt("displayEntities." + stringUuid + ".id");
+                        displays.put(displayID, entity);
+                        Bukkit.getServer().getConsoleSender().sendMessage("[Display] Entity with ID " + displayID + " was downloaded!");
+                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 name: Display
-version: 1.1
+version: 1.2
 main: me.itzisonn_.display.Display
 api-version: 1.19
 author: ItzIsonn_
@@ -8,3 +8,32 @@ description: 'Взаимодействие с сущностями display'
 commands:
   display:
     description: Главная команда плагина
+
+permissions:
+  display.command.*:
+    description: Право на использование всех команд плагина
+    children:
+      display.command.help: true
+      display.command.create: true
+      display.command.delete: true
+      display.command.edit: true
+      display.command.tpcoords: true
+      display.command.tphere: true
+      display.command.tpto: true
+      display.command.changeid: true
+  display.command.help:
+    description: Право на использование подкоманды help
+  display.command.create:
+    description: Право на использование подкоманды create
+  display.command.delete:
+    description: Право на использование подкоманды delete
+  display.command.edit:
+    description: Право на использование подкоманды edit
+  display.command.tpcoords:
+    description: Право на использование подкоманды tpcoords
+  display.command.tphere:
+    description: Право на использование подкоманды tphere
+  display.command.tpto:
+    description: Право на использование подкоманды tpto
+  display.command.changeid:
+    description: Право на использование подкоманды changeid
