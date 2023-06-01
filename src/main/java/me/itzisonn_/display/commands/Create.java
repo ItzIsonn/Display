@@ -38,6 +38,9 @@ public class Create {
         }
         else if (type == EntityType.TEXT_DISPLAY) {
             entity = player.getWorld().spawnEntity(location, EntityType.TEXT_DISPLAY);
+            NamespacedKey namespacedKey = new NamespacedKey(Display.getInstance(), "displayText");
+            PersistentDataContainer data = entity.getPersistentDataContainer();
+            data.set(namespacedKey, PersistentDataType.STRING, "Text");
             ((TextDisplay)entity).text(Component.text("Text"));
         }
 

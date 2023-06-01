@@ -13,6 +13,7 @@ public class Help {
     public static void sendHelp() {
         player.sendMessage(MiniMessage.miniMessage().deserialize("<#6d6d6d>[<gradient:#fdd134:#fb630e>Display</gradient><#6d6d6d>] <#fc881b>Помощь по команде /display"));
         player.sendMessage(MiniMessage.miniMessage().deserialize("<#fdd134>/display help <dark_grey>- <#a5a5a5>Показать помощь"));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("<#fdd134>/display reload <dark_grey>- <#a5a5a5>Перезагрузить конфиг"));
         player.sendMessage(MiniMessage.miniMessage().deserialize("<#fdd134>/display create [block | item | text] <id> <dark_grey>- <#a5a5a5>Создать объект для отображения"));
         player.sendMessage(MiniMessage.miniMessage().deserialize("<#fdd134>/display delete <id> <dark_grey>- <#a5a5a5>Удалить объект с указанным ID"));
         player.sendMessage(MiniMessage.miniMessage().deserialize("<#fdd134>/display edit <id> ... <dark_grey>- <#a5a5a5>Изменить параметры у объекта с указанным ID"));
