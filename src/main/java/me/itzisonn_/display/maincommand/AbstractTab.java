@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractTab implements TabCompleter {
-    public AbstractTab(String command) {
-        PluginCommand pluginCommand = Display.getInstance().getCommand(command);
+    public AbstractTab(String command, Display display) {
+        PluginCommand pluginCommand = display.getCommand(command);
 
         if (pluginCommand != null) {
             pluginCommand.setTabCompleter(this);

@@ -1,5 +1,5 @@
 name: Display
-version: 1.3
+version: 1.4
 main: me.itzisonn_.display.Display
 api-version: 1.19
 softdepend: [PlaceholderAPI]
@@ -11,33 +11,33 @@ commands:
     description: Главная команда плагина
 
 permissions:
-  display.command.*:
+  display.*:
     description: Право на использование всех команд плагина
     children:
-      display.command.help: true
-      display.command.reload: true
-      display.command.create: true
-      display.command.delete: true
-      display.command.edit: true
-      display.command.tpcoords: true
-      display.command.tphere: true
-      display.command.tpto: true
-      display.command.changeid: true
-  display.command.help:
+      display.help: true
+      display.reload: true
+      display.create: true
+      display.delete: true
+      display.edit: true
+      #display.info: true
+      #display.list: true
+      display.tp: true
+      display.clone: true
+  display.help:
     description: Право на использование подкоманды help
-  display.command.reload:
+  display.reload:
     description: Право на использование подкоманды reload
-  display.command.create:
+  display.create:
     description: Право на использование подкоманды create
-  display.command.delete:
+  display.delete:
     description: Право на использование подкоманды delete
-  display.command.edit:
+  display.edit:
     description: Право на использование подкоманды edit
-  display.command.tpcoords:
-    description: Право на использование подкоманды tpcoords
-  display.command.tphere:
-    description: Право на использование подкоманды tphere
-  display.command.tpto:
-    description: Право на использование подкоманды tpto
-  display.command.changeid:
-    description: Право на использование подкоманды changeid
+  #display.info:
+    #description: Право на использование подкоманды info
+  #display.list:
+    #description: Право на использование подкоманды list
+  display.tp:
+    description: Право на использование подкоманды tp
+  display.clone:
+    description: Право на использование подкоманды clone

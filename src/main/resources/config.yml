@@ -1,57 +1,45 @@
-#Конфигурация плагина Display
+###---------------------------###
+###----------DISPLAY----------###
+###---------ItzIsonn_---------###
+###---------------------------###
 
-#Каждые n секунд обновляется текст на объектах. 0 - вообще не обновлять. Тип - int
-textUpdateInterval: 1
+#Каждые n тиков обновляется текст на объектах. 0 - вообще не обновлять. Тип - int
+textUpdateInterval: 20
 
 #Сообщения
 #Используйте {prefix} для префикса перед сообщением
-#Используйте {help} для команды показа помощи
-#Используйте {subcommands} для списка действий команды (указаны в help)
-#Используйте {type} для указания типа объекта
-#Используйте {types} для списка типов display сущностей
-#Используйте {id} и {newid} для указания id объекта
-#Используйте {x}, {y}, {z} и {world} для координат и мира
+#Используйте {id} для указания id объекта
 messages:
-  prefix: "<#6d6d6d>[<gradient:#fdd134:#fb630e>Display</gradient><#6d6d6d>]<reset>"
+  prefix: "<gradient:#adf3fd:#e173fd>Display</gradient> <#6d6d6d>|<reset>"
   errors:
     onlyPlayer: "<red>Команду может выполнять только игрок!"
-    notFull: "{prefix} <red>Неполная команда! Список команд: {help}"
-    unknownAction: "{prefix} <red>Неизвестный тип действия! Используйте: {subcommands}"
-    tooManyArguments: "{prefix} <red>Слишком много аргументов!"
     noPermission: "{prefix} <red>У вас нет прав на выполнение данной команды!"
-    notFoundObjectType: "{prefix} <red>Не найден тип объекта! Используйте: {types}"
-    unknownObjectType: "{prefix} <red>Неизвестный тип объекта! Используйте: {types}"
+    notFull: "{prefix} <red>Неполная команда! Список команд: /display help"
+    unknownAction: "{prefix} <red>Неизвестный тип действия!"
+    tooManyArguments: "{prefix} <red>Слишком много аргументов!"
     notFoundId: "{prefix} <red>Не найден ID объекта!"
     invalidId: "{prefix} <red>ID объекта должен быть числом!"
-    idAlreadyInUse: "{prefix} <red>ID {id} уже используется!"
-    idDoesNotExist: "{prefix} <red>Объекта с ID {id} не существует!"
-    notFoundEditType: "{prefix} <red>Не найден тип редактирования! Используйте: {types}"
-    unknownEditType: "{prefix} <red>Неизвестный тип редактирования! Используйте: {types}"
-    notFoundBlock: "{prefix} <red>Не найден тип блока!"
-    unknownBlock: "{prefix} <red>Неизвестный блок!"
-    notFoundItem: "{prefix} <red>Не найден тип предмета!"
-    unknownItem: "{prefix} <red>Неизвестный предмет!"
-    notFoundLineNumber: "{prefix} <red>Не найден номер строки!"
-    invalidLineNumber: "{prefix} <red>Номер строки должен быть числом!"
-    unknownLineNumber: "{prefix} <red>Неизвестная строка!"
-    oneLine: "{prefix} <red>Осталась последняя строка!"
-    notFoundText: "{prefix} <red>Не найден текст!"
-    notFoundScales: "{prefix} <red>Не найдены размеры!"
-    invalidScales: "{prefix} <red>Неверный формат размеров!"
-    notFoundDimension: "{prefix} <red>Не найдено измерение! Используйте: {types}"
-    unknownDimension: "{prefix} <red>Неизвестное измерение! Используйте: {types}"
+    idAlreadyInUse: "{prefix} <red>Этот ID уже используется!"
+    idDoesNotExist: "{prefix} <red>Объекта с этим ID не существует!"
+    notFoundObjectType: "{prefix} <red>Не найден тип объекта!"
+    unknownObjectType: "{prefix} <red>Неизвестный тип объекта!"
+    notFoundEditFormat: "{prefix} <red>Не найден формат редактирования!"
+    invalidEditFormat: "{prefix} <red>Ошибка в формате редактирования!"
+    notFoundTeleportType: "{prefix} <red>Не найден тип телепорта!"
+    unknownTeleportType: "{prefix} <red>Неизвестный тип телепорта!"
+    notFoundDimension: "{prefix} <red>Не найдено измерение!"
+    unknownDimension: "{prefix} <red>Неизвестное измерение!"
     notFoundCoords: "{prefix} <red>Не найдены координаты!"
     invalidCoords: "{prefix} <red>Неверный формат координат!"
   successfully:
     reloaded: "{prefix} <green>Конфиг плагина успешно перезагружен!"
-    created: "{prefix} <green>Объект для отображения с ID {id} и типом {type} успешно создан!"
-    deleted: "{prefix} <green>Объект с ID {id} успешно удалён!"
-    edited: "{prefix} <green>У объекта с ID {id} успешно изменён параметр {edittype} на {value}<green>!"
-    editedScale: "{prefix} <green>У объекта с ID {id} успешно изменён размер на {scalex}, {scaley}, {scalez}"
-    editedAddline: "{prefix} <green>Объекту с ID {id} успешно добавлена строка под номером {linenumber} с значением {text}<reset><green>!"
-    editedSetline: "{prefix} <green>У объекта с ID {id} успешно изменена строка под номером {linenumber} на значение {text}<reset><green>!"
-    editedRemoveline: "{prefix} <green>У объекта с ID {id} успешно удалена строка под номером {linenumber}<reset><green>!"
-    teleportedCoords: "{prefix} <green>Объект с ID {id} успешно перемещён на координаты {x} {y} {z} в мире {world}!"
-    teleportedHere: "{prefix} <green>Объект с ID {id} успешно перемещён на ваши координаты!"
-    teleportedTo: "{prefix} <green>Вы были успешно перемещены на координаты объекта с ID {id}!"
-    changedID: "{prefix} <green>У объекта с ID {id} ID был изменен на {newid}!"
+    created: "{prefix} <green>Новый объект для отображения с ID {id} успешно создан!"
+    deleted:
+      id: "{prefix} <green>Объект с ID {id} успешно удалён!"
+      all: "{prefix} <green>Все объекты успешно удалёны!"
+    edited: "{prefix} <green>Объект с ID {id} успешно отредактирован!"
+    teleported:
+      pos: "{prefix} <green>Объект с ID {id} успешно перемещён!"
+      here: "{prefix} <green>Объект с ID {id} успешно перемещён!"
+      to: "{prefix} <green>Вы успешно переместились к объекту с ID {id}!"
+    cloned: "{prefix} <green>Объект с ID {id} успешно клонирован!"
