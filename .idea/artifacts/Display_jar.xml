@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Display:jar">
-    <output-path>$PROJECT_DIR$/../_server/plugins</output-path>
-    <root id="archive" name="Display-1.4.jar">
-      <element id="module-output" name="Display" />
-    </root>
-  </artifact>
-</component>
