@@ -1,43 +1,30 @@
 name: Display
-version: 1.4
-main: me.itzisonn_.display.Display
+version: 1.5
+main: me.itzisonn_.display.DisplayPlugin
 api-version: 1.19
 softdepend: [PlaceholderAPI]
 author: ItzIsonn_
-description: 'Взаимодействие с сущностями display'
+description: 'Interaction with display entities'
 
 commands:
-  display:
-    description: Главная команда плагина
+  display: {}
 
 permissions:
   display.*:
-    description: Право на использование всех команд плагина
     children:
       display.help: true
       display.reload: true
       display.create: true
+      display.load: true
       display.delete: true
+      display.list: true
       display.edit: true
-      #display.info: true
-      #display.list: true
       display.tp: true
-      display.clone: true
-  display.help:
-    description: Право на использование подкоманды help
-  display.reload:
-    description: Право на использование подкоманды reload
-  display.create:
-    description: Право на использование подкоманды create
-  display.delete:
-    description: Право на использование подкоманды delete
-  display.edit:
-    description: Право на использование подкоманды edit
-  #display.info:
-    #description: Право на использование подкоманды info
-  #display.list:
-    #description: Право на использование подкоманды list
-  display.tp:
-    description: Право на использование подкоманды tp
-  display.clone:
-    description: Право на использование подкоманды clone
+  display.help: {}
+  display.reload: {}
+  display.create: {}
+  display.load: {}
+  display.delete: {}
+  display.list: {}
+  display.edit: {}
+  display.tp: {}

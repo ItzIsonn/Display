@@ -3,43 +3,92 @@
 ###---------ItzIsonn_---------###
 ###---------------------------###
 
-#Каждые n тиков обновляется текст на объектах. 0 - вообще не обновлять. Тип - int
+# Использовать ли PlaceholderAPI
+enablePapi: true
+
+# Как часто будет обновляться текст на Text Display сущностях (в тиках, 0 - не обновлять)
 textUpdateInterval: 20
 
-#Сообщения
-#Используйте {prefix} для префикса перед сообщением
-#Используйте {id} для указания id объекта
+# Значения по умолчанию, которые будут выставляться при создании сущности
+defaultValues:
+  block: STONE
+  item: APPLE
+  text: "Текст"
+
+# Сообщения
+# Используйте %prefix% для префикса перед сообщением
+# Используйте %id% для указания id объекта
+# Используйте %type% для указания параметра и %value% для указания значения (только для successfully.info)
 messages:
-  prefix: "<gradient:#adf3fd:#e173fd>Display</gradient> <#6d6d6d>|<reset>"
+  prefix: "<gradient:#adf3fd:#e173fd>Display</gradient> <#d0d0d0>|<reset>"
+  info:
+    - "%prefix% <#e173fd>Помощь по команде /display"
+    - "<#adf3fd>/display help <#8e8e8e>- <#d0d0d0>Показать помощь"
+    - "<#adf3fd>/display reload <#8e8e8e>- <#d0d0d0>Перезагрузить конфиг"
+    - "<#adf3fd>/display create [block | item | text | clone] <id> [newid только для clone] <#8e8e8e>- <#d0d0d0>Создать Display-сущность с ID <id>"
+    - "<#adf3fd>/display load <uuid> <id> <#8e8e8e>- <#d0d0d0>Добавить существующую Display-сущность в список под ID <id>"
+    - "<#adf3fd>/display delete [<id> | *] <#8e8e8e>- <#d0d0d0>Удалить объект (или все объекты) с ID <id>"
+    - "<#adf3fd>/display edit <id> <type> <value> <#8e8e8e>- <#d0d0d0>Изменить параметр <type> на значение <value> у объекта с ID <id>"
+    - "  <#c0c4fd>• id <newid> <#8e8e8e>- <#d0d0d0>Изменить ID объекта на другой"
+    - "  <#c0c4fd>• scale <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить размеры объекта на указанные"
+    - "  <#c0c4fd>• billdboard <billdboard> <#8e8e8e>- <#d0d0d0>Изменить режим поворота объекта"
+    - "  <#c0c4fd>• brightness <block>,<sky> <#8e8e8e>- <#d0d0d0>Изменить яркость объекта"
+    - "  <#c0c4fd>• shadow <radius,strenght> <#8e8e8e>- <#d0d0d0>Изменить радиус и силу тени объекта"
+    - "  <#c0c4fd>• view_range <range> <#8e8e8e>- <#d0d0d0>Изменить дальность прорисовки сущности"
+    - "  <#c0c4fd>• material <material> <#8e8e8e>- <#d0d0d0>Изменить материал. Только для block и item"
+    - "  <#c0c4fd>• glowing [on | off | <r>,<g>,<b>] <#8e8e8e>- <#d0d0d0>Изменить подсветку. Только для block и item"
+    - "  <#c0c4fd>• display_transform <transform> <#8e8e8e>- <#d0d0d0>Изменить режим отображения объекта. Только для item"
+    - "  <#c0c4fd>• text [on | off] <#8e8e8e>- <#d0d0d0>Начать редактирование текста через чат. Только для text"
+    - "  <#c0c4fd>• alignment <alignment> <#8e8e8e>- <#d0d0d0>Изменить выравнивание текста. Только для text"
+    - "  <#c0c4fd>• background <r>,<g>,<b> <#8e8e8e>- <#d0d0d0>Изменить цвет фона. Только для text"
+    - "  <#c0c4fd>• line_width <width> <#8e8e8e>- <#d0d0d0>Изменить ширину строки. Только для text"
+    - "  <#c0c4fd>• see_through [true | false] <#8e8e8e>- <#d0d0d0>Изменить отображение объекта через блоки. Только для text"
+    - "  <#c0c4fd>• text_opacity <opacity> <#8e8e8e>- <#d0d0d0>Изменить прозрачность текста. Только для text"
+    - "<#adf3fd>/display tp <id> [pos | here | to] [<world> <x> <y> <z> только для pos] <#8e8e8e>- <#d0d0d0>Телепортировать объект/телепортироваться к объекту с ID <id>"
+  editingText: "<italic><dark_gray>Нажмите, чтобы получить текущий текст"
+  list:
+    title: "%prefix% <#e173fd>Список всех Display-сущностей"
+    format: "<#c0c4fd>%pos%. <#adf3fd>%type% <#8e8e8e>- <#adf3fd>%id% <#d0d0d0>(<click:run_command:/display tp %id% to>телепортироваться</click>)"
+    empty: "%prefix% <red>Список пуст!"
   errors:
     onlyPlayer: "<red>Команду может выполнять только игрок!"
-    noPermission: "{prefix} <red>У вас нет прав на выполнение данной команды!"
-    notFull: "{prefix} <red>Неполная команда! Список команд: /display help"
-    unknownAction: "{prefix} <red>Неизвестный тип действия!"
-    tooManyArguments: "{prefix} <red>Слишком много аргументов!"
-    notFoundId: "{prefix} <red>Не найден ID объекта!"
-    invalidId: "{prefix} <red>ID объекта должен быть числом!"
-    idAlreadyInUse: "{prefix} <red>Этот ID уже используется!"
-    idDoesNotExist: "{prefix} <red>Объекта с этим ID не существует!"
-    notFoundObjectType: "{prefix} <red>Не найден тип объекта!"
-    unknownObjectType: "{prefix} <red>Неизвестный тип объекта!"
-    notFoundEditFormat: "{prefix} <red>Не найден формат редактирования!"
-    invalidEditFormat: "{prefix} <red>Ошибка в формате редактирования!"
-    notFoundTeleportType: "{prefix} <red>Не найден тип телепорта!"
-    unknownTeleportType: "{prefix} <red>Неизвестный тип телепорта!"
-    notFoundDimension: "{prefix} <red>Не найдено измерение!"
-    unknownDimension: "{prefix} <red>Неизвестное измерение!"
-    notFoundCoords: "{prefix} <red>Не найдены координаты!"
-    invalidCoords: "{prefix} <red>Неверный формат координат!"
+    noPermission: "%prefix% <red>У вас нет прав на выполнение данной команды!"
+    notFull: "%prefix% <red>Неполная команда! Список команд: /display help"
+    unknownAction: "%prefix% <red>Неизвестный тип действия!"
+    tooManyArguments: "%prefix% <red>Слишком много аргументов!"
+    notFoundId: "%prefix% <red>Не найден ID объекта!"
+    invalidId: "%prefix% <red>ID объекта должен быть числом!"
+    idAlreadyInUse: "%prefix% <red>Этот ID уже используется!"
+    idDoesNotExist: "%prefix% <red>Объекта с этим ID не существует!"
+    notFoundObjectType: "%prefix% <red>Не найден тип объекта!"
+    unknownObjectType: "%prefix% <red>Неизвестный тип объекта!"
+    notFoundUuid: "%prefix% <red>Не найден UUID сущности!"
+    invalidUuid: "%prefix% <red>Неверный UUID сущности!"
+    invalidEntity: "%prefix% <red>Сущность не найдена или не является Display-сущностью!"
+    entityAlreadyInUse: "%prefix% <red>Сущность уже есть в списке!"
+    notFoundEditType: "%prefix% <red>Не найден тип редактирования!"
+    invalidEditType: "%prefix% <red>Неверный тип редактирования!"
+    notFoundEditValue: "%prefix% <red>Не найдено значение редактирования!"
+    invalidEditValue: "%prefix% <red>Неверное значение редактирования!"
+    notFoundTeleportType: "%prefix% <red>Не найден тип телепорта!"
+    unknownTeleportType: "%prefix% <red>Неизвестный тип телепорта!"
+    notFoundDimension: "%prefix% <red>Не найдено измерение!"
+    unknownDimension: "%prefix% <red>Неизвестное измерение!"
+    notFoundCoords: "%prefix% <red>Не найдены координаты!"
+    invalidCoords: "%prefix% <red>Неверный формат координат!"
   successfully:
-    reloaded: "{prefix} <green>Конфиг плагина успешно перезагружен!"
-    created: "{prefix} <green>Новый объект для отображения с ID {id} успешно создан!"
-    deleted:
-      id: "{prefix} <green>Объект с ID {id} успешно удалён!"
-      all: "{prefix} <green>Все объекты успешно удалёны!"
-    edited: "{prefix} <green>Объект с ID {id} успешно отредактирован!"
-    teleported:
-      pos: "{prefix} <green>Объект с ID {id} успешно перемещён!"
-      here: "{prefix} <green>Объект с ID {id} успешно перемещён!"
-      to: "{prefix} <green>Вы успешно переместились к объекту с ID {id}!"
-    cloned: "{prefix} <green>Объект с ID {id} успешно клонирован!"
+    reload: "%prefix% <green>Конфиг плагина успешно перезагружен!"
+    create:
+      new: "%prefix% <green>Новый объект для отображения с ID %id% успешно создан!"
+      clone: "%prefix% <green>Объект с ID %id% успешно клонирован!"
+    load: "%prefix% <green>Сущность с UUID %uuid% успешно добавлена в список под ID %id%!"
+    delete:
+      id: "%prefix% <green>Объект с ID %id% успешно удалён!"
+      all: "%prefix% <green>Все объекты успешно удалёны!"
+    edit:
+      edit: "%prefix% <green>Объект с ID %id% успешно отредактирован!"
+      info: "%prefix% <green>Объект с ID %id% у параметра %type% имеет значение %value%"
+    teleport:
+      pos: "%prefix% <green>Объект с ID %id% успешно перемещён!"
+      here: "%prefix% <green>Объект с ID %id% успешно перемещён!"
+      to: "%prefix% <green>Вы успешно переместились к объекту с ID %id%!"
