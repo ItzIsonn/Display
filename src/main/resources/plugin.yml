@@ -1,5 +1,5 @@
 name: Display
-version: 1.5
+version: 1.6
 main: me.itzisonn_.display.DisplayPlugin
 api-version: 1.19
 softdepend: [PlaceholderAPI]

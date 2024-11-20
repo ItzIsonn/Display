@@ -33,7 +33,7 @@ public class EventManager implements Listener {
             if (plugin.getDisplaysMap().containsValue(entity)) continue;
 
             plugin.getDisplaysMap().put(id, entity);
-            plugin.getLogger().log(Level.INFO, "Entity with ID " + id + " was loaded!");
+            plugin.getLogger().log(Level.INFO, "Loaded entity with ID " + id);
         }
     }
 
