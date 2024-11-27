@@ -18,8 +18,9 @@ public class ReloadSubcommand extends AbstractSubcommand {
         }
 
         plugin.getConfigManager().reloadConfig();
-        plugin.getUtils().getScheduler().cancel();
-        plugin.getUtils().startTextUpdating();
+        plugin.hookPapi();
+        plugin.getScheduler().cancel();
+        plugin.startTextUpdating();
 
         player.sendMessage(plugin.getConfigManager().getSuccessfully("reload", null, player));
     }

@@ -1,7 +1,6 @@
 package me.itzisonn_.display.subcommands;
 
 import me.itzisonn_.display.DisplayPlugin;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class HelpSubcommand extends AbstractSubcommand {
             return;
         }
 
-        plugin.getConfigManager().getInfo().forEach(message -> player.sendMessage(MiniMessage.miniMessage().deserialize(message)));
+        plugin.getConfigManager().getInfo().forEach(player::sendMessage);
     }
 
     @Override

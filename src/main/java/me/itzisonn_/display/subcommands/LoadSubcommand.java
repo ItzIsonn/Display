@@ -2,7 +2,8 @@ package me.itzisonn_.display.subcommands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import me.itzisonn_.display.Utils;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -51,8 +52,8 @@ public class LoadSubcommand extends AbstractSubcommand {
 
         Display display;
         try {
-            Entity entity = Bukkit.getEntity(UUID.fromString(args[1]));
-            if (entity instanceof Display) display = (Display) entity;
+            Entity entity = Bukkit.getEntity(UUID.fromString(args[0]));
+            if (entity instanceof Display displayEntity) display = displayEntity;
             else {
                 player.sendMessage(plugin.getConfigManager().getError("invalidEntity", String.valueOf(id), player));
                 return;
@@ -72,16 +73,14 @@ public class LoadSubcommand extends AbstractSubcommand {
         PersistentDataContainer data = display.getPersistentDataContainer();
         data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 
-        String message = MiniMessage.miniMessage().serialize(plugin.getConfigManager().getSuccessfully("load", String.valueOf(id), player));
-        player.sendMessage(MiniMessage.miniMessage().deserialize(message
-                .replace("%uuid%", args[0])));
+        player.sendMessage(plugin.getConfigManager().getSuccessfully("load", String.valueOf(id), player, Placeholder.parsed("uuid", args[0])));
     }
 
     @Override
     public ArrayList<String> onTabComplete(Player player, String[] args) {
         if (args.length == 1) {
             ArrayList<String> list = Lists.newArrayList("<uuid>");
-            Display target = plugin.getUtils().getTarget(player, 10);
+            Display target = Utils.getTarget(player, 10);
             if (target != null) list.add(target.getUniqueId().toString());
             return list;
         }

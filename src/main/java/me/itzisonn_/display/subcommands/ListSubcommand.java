@@ -2,6 +2,7 @@ package me.itzisonn_.display.subcommands;
 
 import me.itzisonn_.display.DisplayPlugin;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 
@@ -21,21 +22,18 @@ public class ListSubcommand extends AbstractSubcommand {
 
 
         if (plugin.getDisplaysMap().isEmpty()) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(
-                    plugin.getConfigManager().getListEmpty().replace("%prefix%", plugin.getConfigManager().getPrefix())));
+            player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListEmpty(), Placeholder.parsed("prefix", plugin.getConfigManager().getPrefix())));
             return;
         }
 
-        player.sendMessage(MiniMessage.miniMessage().deserialize(
-                plugin.getConfigManager().getListTitle().replace("%prefix%", plugin.getConfigManager().getPrefix())));
+        player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListTitle(), Placeholder.parsed("prefix", plugin.getConfigManager().getPrefix())));
         int pos = 1;
         for (int id : plugin.getDisplaysMap().keySet()) {
             Display entity = plugin.getDisplaysMap().get(id);
-            player.sendMessage(MiniMessage.miniMessage().deserialize(
-                    plugin.getConfigManager().getListFormat()
-                            .replace("%pos%", String.valueOf(pos))
-                            .replace("%type%", entity.getType().name())
-                            .replace("%id%", String.valueOf(id))));
+            player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListFormat(),
+                    Placeholder.parsed("pos", String.valueOf(pos)),
+                    Placeholder.parsed("type", entity.getType().name()),
+                    Placeholder.parsed("id", String.valueOf(id))));
             pos++;
         }
     }

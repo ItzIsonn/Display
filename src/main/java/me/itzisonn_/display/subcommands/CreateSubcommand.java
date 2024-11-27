@@ -20,6 +20,7 @@ public class CreateSubcommand extends AbstractSubcommand {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onCommand(Player player, String[] args) {
         if (args.length > 3) {
             player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
@@ -86,13 +87,20 @@ public class CreateSubcommand extends AbstractSubcommand {
                 case BLOCK_DISPLAY -> {
                     location = new Location(location.getWorld(), location.getX() - 0.5, location.getY(), location.getZ() - 0.5);
                     entity = (BlockDisplay) location.getWorld().spawnEntity(location, EntityType.BLOCK_DISPLAY);
+
                     ((BlockDisplay) entity).setBlock(((BlockDisplay) cloneEntity).getBlock());
+                    entity.setGlowing(cloneEntity.isGlowing());
+                    entity.setGlowColorOverride(cloneEntity.getGlowColorOverride());
                 }
 
                 case ITEM_DISPLAY -> {
                     location = new Location(location.getWorld(), location.getX(), location.getY() + 0.5, location.getZ());
                     entity = (ItemDisplay) location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
+
                     ((ItemDisplay) entity).setItemStack(((ItemDisplay) cloneEntity).getItemStack());
+                    entity.setGlowing(cloneEntity.isGlowing());
+                    entity.setGlowColorOverride(cloneEntity.getGlowColorOverride());
+                    ((ItemDisplay) entity).setItemDisplayTransform(((ItemDisplay) cloneEntity).getItemDisplayTransform());
                 }
 
                 case TEXT_DISPLAY -> {
@@ -105,12 +113,22 @@ public class CreateSubcommand extends AbstractSubcommand {
                     PersistentDataContainer data = entity.getPersistentDataContainer();
                     data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, cloneText);
                     ((TextDisplay) entity).text(Component.text(cloneText));
+
+                    ((TextDisplay) entity).setAlignment(((TextDisplay) cloneEntity).getAlignment());
+                    ((TextDisplay) entity).setBackgroundColor(((TextDisplay) cloneEntity).getBackgroundColor());
+                    ((TextDisplay) entity).setLineWidth(((TextDisplay) cloneEntity).getLineWidth());
+                    ((TextDisplay) entity).setSeeThrough(((TextDisplay) cloneEntity).isSeeThrough());
+                    ((TextDisplay) entity).setTextOpacity(((TextDisplay) cloneEntity).getTextOpacity());
                 }
             }
 
             assert entity != null;
-            entity.setGlowing(cloneEntity.isGlowing());
             entity.setTransformation(cloneEntity.getTransformation());
+            entity.setBillboard(cloneEntity.getBillboard());
+            entity.setBrightness(cloneEntity.getBrightness());
+            entity.setShadowRadius(cloneEntity.getShadowRadius());
+            entity.setShadowStrength(cloneEntity.getShadowStrength());
+            entity.setViewRange(cloneEntity.getViewRange());
 
             plugin.getDisplaysMap().put(id, entity);
             PersistentDataContainer data = entity.getPersistentDataContainer();
@@ -179,7 +197,7 @@ public class CreateSubcommand extends AbstractSubcommand {
     @Override
     public ArrayList<String> onTabComplete(Player player, String[] args) {
         if (args.length == 1) return Lists.newArrayList("block", "item", "text", "clone");
-        if (args.length == 2) return Lists.newArrayList("<new_id>");
+        if (args.length == 2) return Lists.newArrayList("<id>");
         if (args.length == 3 && args[0].equalsIgnoreCase("clone")) return getIDs();
         return new ArrayList<>();
     }

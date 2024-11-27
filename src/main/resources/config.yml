@@ -1,10 +1,10 @@
 ###---------------------------###
-###----------DISPLAY----------###
+###----------Display----------###
 ###---------ItzIsonn_---------###
 ###---------------------------###
 
 # Использовать ли PlaceholderAPI
-enablePapi: true
+enablePapi: false
 
 # Как часто будет обновляться текст на Text Display сущностях (в тиках, 0 - не обновлять)
 textUpdateInterval: 20
@@ -16,13 +16,12 @@ defaultValues:
   text: "Текст"
 
 # Сообщения
-# Используйте %prefix% для префикса перед сообщением
-# Используйте %id% для указания id объекта
-# Используйте %type% для указания параметра и %value% для указания значения (только для successfully.info)
+# Используйте <prefix> для префикса перед сообщением
+# Используйте <id> для указания id объекта
 messages:
   prefix: "<gradient:#adf3fd:#e173fd>Display</gradient> <#d0d0d0>|<reset>"
   info:
-    - "%prefix% <#e173fd>Помощь по команде /display"
+    - "<prefix> <#e173fd>Помощь по команде /display"
     - "<#adf3fd>/display help <#8e8e8e>- <#d0d0d0>Показать помощь"
     - "<#adf3fd>/display reload <#8e8e8e>- <#d0d0d0>Перезагрузить конфиг"
     - "<#adf3fd>/display create [block | item | text | clone] <id> [new_id только для clone] <#8e8e8e>- <#d0d0d0>Создать Display-сущность с ID <id>"
@@ -48,48 +47,51 @@ messages:
     - "<#adf3fd>/display tp <id> [pos | here | to] [<world> <x> <y> <z> только для pos] <#8e8e8e>- <#d0d0d0>Телепортировать объект/телепортироваться к объекту с ID <id>"
   editingText: "<italic><dark_gray>Нажмите, чтобы получить текущий текст"
   list:
-    title: "%prefix% <#e173fd>Список всех Display-сущностей"
-    format: "<#c0c4fd>%pos%. <#adf3fd>%type% <#8e8e8e>- <#adf3fd>%id% <#d0d0d0>(<click:run_command:/display tp %id% to>телепортироваться</click>)"
-    empty: "%prefix% <red>Список пуст!"
+    title: "<prefix> <#e173fd>Список всех Display-сущностей"
+    # Используйте <pos> для указания порядкового номера, <type> для указания типа сущности (только для этой строчки)
+    format: "<#c0c4fd><pos>. <#adf3fd><type> <#8e8e8e>- <#adf3fd><id> <#d0d0d0>(<click:run_command:/display tp <id> to>телепортироваться</click>)"
+    empty: "<prefix> <red>Список пуст!"
   errors:
     onlyPlayer: "<red>Команду может выполнять только игрок!"
-    noPermission: "%prefix% <red>У вас нет прав на выполнение данной команды!"
-    notFull: "%prefix% <red>Неполная команда! Список команд: /display help"
-    unknownAction: "%prefix% <red>Неизвестный тип действия!"
-    tooManyArguments: "%prefix% <red>Слишком много аргументов!"
-    notFoundId: "%prefix% <red>Не найден ID объекта!"
-    invalidId: "%prefix% <red>ID объекта должен быть числом!"
-    idAlreadyInUse: "%prefix% <red>Этот ID уже используется!"
-    idDoesNotExist: "%prefix% <red>Объекта с этим ID не существует!"
-    notFoundObjectType: "%prefix% <red>Не найден тип объекта!"
-    unknownObjectType: "%prefix% <red>Неизвестный тип объекта!"
-    notFoundUuid: "%prefix% <red>Не найден UUID сущности!"
-    invalidUuid: "%prefix% <red>Неверный UUID сущности!"
-    invalidEntity: "%prefix% <red>Сущность не найдена или не является Display-сущностью!"
-    entityAlreadyInUse: "%prefix% <red>Сущность уже есть в списке!"
-    notFoundEditType: "%prefix% <red>Не найден тип редактирования!"
-    invalidEditType: "%prefix% <red>Неверный тип редактирования!"
-    notFoundEditValue: "%prefix% <red>Не найдено значение редактирования!"
-    invalidEditValue: "%prefix% <red>Неверное значение редактирования!"
-    notFoundTeleportType: "%prefix% <red>Не найден тип телепорта!"
-    unknownTeleportType: "%prefix% <red>Неизвестный тип телепорта!"
-    notFoundDimension: "%prefix% <red>Не найдено измерение!"
-    unknownDimension: "%prefix% <red>Неизвестное измерение!"
-    notFoundCoords: "%prefix% <red>Не найдены координаты!"
-    invalidCoords: "%prefix% <red>Неверный формат координат!"
+    noPermission: "<prefix> <red>У вас нет прав на выполнение данной команды!"
+    notFull: "<prefix> <red>Неполная команда! Список команд: /display help"
+    unknownAction: "<prefix> <red>Неизвестный тип действия!"
+    tooManyArguments: "<prefix> <red>Слишком много аргументов!"
+    notFoundId: "<prefix> <red>Не найден ID объекта!"
+    invalidId: "<prefix> <red>ID объекта должен быть числом!"
+    idAlreadyInUse: "<prefix> <red>Этот ID уже используется!"
+    idDoesNotExist: "<prefix> <red>Объекта с этим ID не существует!"
+    notFoundObjectType: "<prefix> <red>Не найден тип объекта!"
+    unknownObjectType: "<prefix> <red>Неизвестный тип объекта!"
+    notFoundUuid: "<prefix> <red>Не найден UUID сущности!"
+    invalidUuid: "<prefix> <red>Неверный UUID сущности!"
+    invalidEntity: "<prefix> <red>Сущность не найдена или не является Display-сущностью!"
+    entityAlreadyInUse: "<prefix> <red>Сущность уже есть в списке!"
+    notFoundEditType: "<prefix> <red>Не найден тип редактирования!"
+    invalidEditType: "<prefix> <red>Неверный тип редактирования!"
+    notFoundEditValue: "<prefix> <red>Не найдено значение редактирования!"
+    invalidEditValue: "<prefix> <red>Неверное значение редактирования!"
+    notFoundTeleportType: "<prefix> <red>Не найден тип телепорта!"
+    unknownTeleportType: "<prefix> <red>Неизвестный тип телепорта!"
+    notFoundDimension: "<prefix> <red>Не найдено измерение!"
+    unknownDimension: "<prefix> <red>Неизвестное измерение!"
+    notFoundCoords: "<prefix> <red>Не найдены координаты!"
+    invalidCoords: "<prefix> <red>Неверный формат координат!"
   successfully:
-    reload: "%prefix% <green>Конфиг плагина успешно перезагружен!"
+    reload: "<prefix> <green>Конфиг плагина успешно перезагружен!"
     create:
-      new: "%prefix% <green>Новый объект для отображения с ID %id% успешно создан!"
-      clone: "%prefix% <green>Объект с ID %id% успешно клонирован!"
-    load: "%prefix% <green>Сущность с UUID %uuid% успешно добавлена в список под ID %id%!"
+      new: "<prefix> <green>Новый объект для отображения с ID <id> успешно создан!"
+      clone: "<prefix> <green>Объект с ID <id> успешно клонирован!"
+      # Используйте <uuid> для UUID сущности
+    load: "<prefix> <green>Сущность с UUID <uuid> успешно добавлена в список под ID <id>!"
     delete:
-      id: "%prefix% <green>Объект с ID %id% успешно удалён!"
-      all: "%prefix% <green>Все объекты успешно удалёны!"
+      id: "<prefix> <green>Объект с ID <id> успешно удалён!"
+      all: "<prefix> <green>Все объекты успешно удалёны!"
     edit:
-      edit: "%prefix% <green>Объект с ID %id% успешно отредактирован!"
-      info: "%prefix% <green>Объект с ID %id% у параметра %type% имеет значение %value%"
+      edit: "<prefix> <green>Объект с ID <id> успешно отредактирован!"
+      # Используйте <type> для указания параметра, <value> для указания значения (только для этой строчки)
+      info: "<prefix> <green>Объект с ID <id> у параметра <type> имеет значение <value>"
     teleport:
-      pos: "%prefix% <green>Объект с ID %id% успешно перемещён!"
-      here: "%prefix% <green>Объект с ID %id% успешно перемещён!"
-      to: "%prefix% <green>Вы успешно переместились к объекту с ID %id%!"
+      pos: "<prefix> <green>Объект с ID <id> успешно перемещён!"
+      here: "<prefix> <green>Объект с ID <id> успешно перемещён!"
+      to: "<prefix> <green>Вы успешно переместились к объекту с ID <id>!"

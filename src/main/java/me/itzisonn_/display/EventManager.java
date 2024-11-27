@@ -11,7 +11,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Objects;
 import java.util.logging.Level;
 
 public class EventManager implements Listener {
@@ -21,14 +20,14 @@ public class EventManager implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void onChunckLoad(ChunkLoadEvent e) {
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkLoad(ChunkLoadEvent e) {
         for (Entity chunkEntity : e.getChunk().getEntities()) {
             if (!(chunkEntity instanceof Display entity)) continue;
 
             PersistentDataContainer data = entity.getPersistentDataContainer();
             if (!data.has(plugin.getNskDisplayId(), PersistentDataType.INTEGER)) continue;
-            int id = Objects.requireNonNull(data.get(plugin.getNskDisplayId(), PersistentDataType.INTEGER));
+            int id = data.get(plugin.getNskDisplayId(), PersistentDataType.INTEGER);
 
             if (plugin.getDisplaysMap().containsValue(entity)) continue;
 
@@ -37,15 +36,15 @@ public class EventManager implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerChat(AsyncChatEvent e) {
         Player player = e.getPlayer();
 
-        if (!plugin.getPlayersEditingMap().containsKey(player)) return;
+        if (!plugin.getPlayersEditingMap().containsKey(player.getUniqueId().toString())) return;
         e.setCancelled(true);
 
         String message = MiniMessage.miniMessage().serialize(e.originalMessage()).replaceAll("\\\\<", "<");
-        Entity entity = plugin.getDisplaysMap().get(plugin.getPlayersEditingMap().get(player));
+        Entity entity = plugin.getDisplaysMap().get(plugin.getPlayersEditingMap().get(player.getUniqueId().toString()));
 
         PersistentDataContainer data = entity.getPersistentDataContainer();
         data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, message);

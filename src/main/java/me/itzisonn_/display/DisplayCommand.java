@@ -1,6 +1,7 @@
 package me.itzisonn_.display;
 
 import me.itzisonn_.display.subcommands.*;
+import me.itzisonn_.display.subcommands.EditSubcommand;
 import org.bukkit.command.*;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +74,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String str, @NotNull String[] args) {
-        ArrayList<String> tabComplete = tabComplete(sender, args);
+        List<String> tabComplete = tabComplete(sender, args);
 
         String last = args[args.length - 1];
         List<String> result = new ArrayList<>();
@@ -85,11 +86,11 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
         return result;
     }
 
-    public ArrayList<String> tabComplete(CommandSender sender, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) return new ArrayList<>();
 
         if (args.length == 1) {
-            ArrayList<String> arrayList = new ArrayList<>();
+            List<String> arrayList = new ArrayList<>();
 
             for (AbstractSubcommand subcommand : subcommands) {
                 if (player.hasPermission("display." + subcommand.getName()) || player.hasPermission("display.*"))
