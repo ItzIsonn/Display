@@ -42,11 +42,10 @@ public class TextEditType extends AbstractEditType {
             String text = data.get(plugin.getNskDisplayText(), PersistentDataType.STRING);
 
             if (text != null) {
-                String message = "<click:copy_to_clipboard:'" + text + "'><click:suggest_command:'" + text + "'><hover:show_text:'" +
-                        plugin.parsePlaceholders(player, text) + "'>";
-
-                player.sendMessage(plugin.getMiniMessage().deserialize(message)
-                                .append(plugin.getConfigManager().getGlobalMessagesSection().getEditingText().getComponent(player, id)));
+                player.sendMessage(plugin.getConfigManager().getGlobalMessagesSection().getEditingText().getComponent(player,
+                                Placeholder.parsed("id", String.valueOf(id)),
+                                Placeholder.parsed("raw_text", text),
+                                Placeholder.parsed("parsed_text", plugin.parsePlaceholders(player, text))));
             }
 
         }

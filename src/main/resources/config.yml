@@ -31,6 +31,8 @@ messages:
     - "<#adf3fd>/display edit <id> <type> <value> <#8e8e8e>- <#d0d0d0>Изменить параметр <type> на значение <value> у объекта с ID <id>"
     - "  <#c0c4fd>• id <new_id> <#8e8e8e>- <#d0d0d0>Изменить ID объекта на другой"
     - "  <#c0c4fd>• scale <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить размеры объекта на указанные"
+    - "  <#c0c4fd>• rotation <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить поворот объекта на указанные углы в градусах"
+    - "  <#c0c4fd>• translation <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить смещение объекта на указанное"
     - "  <#c0c4fd>• billboard <billboard> <#8e8e8e>- <#d0d0d0>Изменить режим поворота объекта"
     - "  <#c0c4fd>• brightness <block>,<sky> <#8e8e8e>- <#d0d0d0>Изменить яркость объекта"
     - "  <#c0c4fd>• shadow <radius>,<strength> <#8e8e8e>- <#d0d0d0>Изменить радиус и силу тени объекта"
@@ -45,7 +47,7 @@ messages:
     - "  <#c0c4fd>• see_through [true | false] <#8e8e8e>- <#d0d0d0>Изменить отображение объекта через блоки. Только для text"
     - "  <#c0c4fd>• text_opacity <opacity> <#8e8e8e>- <#d0d0d0>Изменить прозрачность текста. Только для text"
     - "<#adf3fd>/display tp <id> [pos | here | to] [<world> <x> <y> <z> только для pos] <#8e8e8e>- <#d0d0d0>Телепортировать объект/телепортироваться к объекту с ID <id>"
-  editingText: "<italic><dark_gray>Нажмите, чтобы получить текущий текст"
+  editingText: "<click:copy_to_clipboard:'<raw_text>'><click:suggest_command:'<raw_text>'><hover:show_text:'<parsed_text>'><italic><gray>Нажмите, чтобы получить текущий текст"
   list:
     title: "<prefix> <#e173fd>Список всех Display-сущностей"
     # Используйте <pos> для указания порядкового номера, <type> для указания типа сущности (только для этой строчки)
@@ -92,6 +94,7 @@ messages:
       # Используйте <type> для указания параметра, <value> для указания значения (только для этой строчки)
       info: "<prefix> Объект с <green>ID <id></green> у параметра <green><type></green> имеет значение <green><value></green>"
     teleport:
-      pos: "<prefix> Объект с <green>ID <id></green> успешно перемещён!"
-      here: "<prefix> Объект с <green>ID <id></green> успешно перемещён!"
+      # Используйте <x>, <y> и <z> для указания координат телепортации (только для этой строчки)
+      pos: "<prefix> Объект с <green>ID <id></green> успешно перемещён на координаты <green><x> <y> <z></green>!"
+      here: "<prefix> Объект с <green>ID <id></green> успешно перемещён к вам!"
       to: "<prefix> Вы успешно переместились к объекту с <green>ID <id></green>!"

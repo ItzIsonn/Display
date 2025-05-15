@@ -102,6 +102,7 @@ public class DisplayPlugin extends JavaPlugin {
 
     public void hookPapi() {
         isHookedPapi = false;
+
         if (configManager.getGlobalSection().isPapiEnabled()) {
             if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                 getLogger().log(Level.INFO, "Successfully hooked into PlaceholderAPI!");

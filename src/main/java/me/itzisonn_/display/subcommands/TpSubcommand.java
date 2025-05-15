@@ -2,6 +2,7 @@ package me.itzisonn_.display.subcommands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -81,7 +82,11 @@ public class TpSubcommand extends AbstractSubcommand {
 
                 entity.teleport(new Location(world, x, y, z));
 
-                player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getTeleportPos().getComponent(player, id));
+                player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getTeleportPos().getComponent(player,
+                        Placeholder.parsed("id", String.valueOf(id)),
+                        Placeholder.parsed("x", String.valueOf(x)),
+                        Placeholder.parsed("y", String.valueOf(y)),
+                        Placeholder.parsed("z", String.valueOf(z))));
             }
 
             case "here" -> {
