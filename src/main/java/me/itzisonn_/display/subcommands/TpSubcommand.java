@@ -18,12 +18,12 @@ public class TpSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 6) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
             return;
         }
 
@@ -32,38 +32,38 @@ public class TpSubcommand extends AbstractSubcommand {
             id = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidId", args[0], player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[0]));
             return;
         }
 
         Display entity = plugin.getDisplaysMap().get(id);
 
         if (!plugin.getDisplaysMap().containsKey(id) || entity.isDead()) {
-            player.sendMessage(plugin.getConfigManager().getError("idDoesNotExist", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundTeleportType", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundTeleportType().getComponent(player, id));
             return;
         }
 
         switch (args[1].toLowerCase()) {
             case "pos" -> {
                 if (args.length < 3) {
-                    player.sendMessage(plugin.getConfigManager().getError("notFoundDimension", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundDimension().getComponent(player, id));
                     return;
                 }
 
                 World world = Bukkit.getWorld(args[2]);
 
                 if (world == null) {
-                    player.sendMessage(plugin.getConfigManager().getError("unknownDimension", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownDimension().getComponent(player, id));
                     return;
                 }
 
                 if (args.length < 6) {
-                    player.sendMessage(plugin.getConfigManager().getError("notFoundCoords", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundCoords().getComponent(player, id));
                     return;
                 }
 
@@ -75,18 +75,18 @@ public class TpSubcommand extends AbstractSubcommand {
                     z = Double.parseDouble(args[5]);
                 }
                 catch (NumberFormatException ignore) {
-                    player.sendMessage(plugin.getConfigManager().getError("invalidCoords", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidCoords().getComponent(player, id));
                     return;
                 }
 
                 entity.teleport(new Location(world, x, y, z));
 
-                player.sendMessage(plugin.getConfigManager().getSuccessfully("teleport.pos", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getTeleportPos().getComponent(player, id));
             }
 
             case "here" -> {
                 if (args.length > 2) {
-                    player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player, id));
                     return;
                 }
 
@@ -95,12 +95,12 @@ public class TpSubcommand extends AbstractSubcommand {
                 location.setPitch(0);
                 entity.teleport(location);
 
-                player.sendMessage(plugin.getConfigManager().getSuccessfully("teleport.here", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getTeleportHere().getComponent(player, id));
             }
 
             case "to" -> {
                 if (args.length > 2) {
-                    player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player, id));
                     return;
                 }
 
@@ -109,10 +109,10 @@ public class TpSubcommand extends AbstractSubcommand {
                 location.setPitch(player.getLocation().getPitch());
                 player.teleport(location);
 
-                player.sendMessage(plugin.getConfigManager().getSuccessfully("teleport.to", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getTeleportTo().getComponent(player, id));
             }
 
-            default -> player.sendMessage(plugin.getConfigManager().getError("unknownTeleportType", String.valueOf(id), player));
+            default -> player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownTeleportType().getComponent(player, id));
         }
     }
 

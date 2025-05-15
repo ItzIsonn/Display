@@ -23,7 +23,8 @@ public class BackgroundEditType extends AbstractEditType {
         if (value.equals("?")) {
             String infoValue = ((TextDisplay) entity).getBackgroundColor() == null ? "255,255,255" :
                     ((TextDisplay) entity).getBackgroundColor().getRed() + "," + ((TextDisplay) entity).getBackgroundColor().getGreen() + "," + ((TextDisplay) entity).getBackgroundColor().getBlue();
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "background"),
                     Placeholder.parsed("value", infoValue)));
             return false;
@@ -31,7 +32,7 @@ public class BackgroundEditType extends AbstractEditType {
 
         String[] color = value.split(",");
         if (color.length != 3) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
 
@@ -40,7 +41,7 @@ public class BackgroundEditType extends AbstractEditType {
             return true;
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }

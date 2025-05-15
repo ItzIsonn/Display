@@ -16,6 +16,7 @@ public class EditSubcommand extends AbstractSubcommand {
         editTypes = Set.of(
                 new IdEditType(plugin),
                 new ScaleEditType(plugin),
+                new RotationEditType(plugin),
                 new BillboardEditType(plugin),
                 new BrightnessEditType(plugin),
                 new ShadowEditType(plugin),
@@ -28,13 +29,14 @@ public class EditSubcommand extends AbstractSubcommand {
                 new BackgroundEditType(plugin),
                 new LineWidthEditType(plugin),
                 new SeeThroughEditType(plugin),
-                new TextOpacityEditType(plugin));
+                new TextOpacityEditType(plugin)
+        );
     }
 
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundUuid().getComponent(player));
             return;
         }
 
@@ -43,26 +45,26 @@ public class EditSubcommand extends AbstractSubcommand {
             id = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidId", args[0], player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[0]));
             return;
         }
 
         Display entity = plugin.getDisplaysMap().get(id);
 
         if (!plugin.getDisplaysMap().containsKey(id) || entity.isDead()) {
-            player.sendMessage(plugin.getConfigManager().getError("idDoesNotExist", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundEditType", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundEditType().getComponent(player, id));
             return;
         }
 
         String type = args[1].toLowerCase();
 
         if (args.length < 3) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundEditValue().getComponent(player, id));
             return;
         }
 
@@ -75,11 +77,13 @@ public class EditSubcommand extends AbstractSubcommand {
         for (AbstractEditType editType : editTypes) {
             if (type.equals(editType.getName())) {
                 if (!editType.getEntityTypes().contains(entity.getType())) {
-                    player.sendMessage(plugin.getConfigManager().getError("invalidEditType", String.valueOf(id), player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditType().getComponent(player, id));
                     return;
                 }
                 boolean shouldSendMessage = editType.onCommand(player, value, entity, id);
-                if (shouldSendMessage) player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.edit", String.valueOf(id), player));
+                if (shouldSendMessage) {
+                    player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditEdit().getComponent(player, id));
+                }
                 return;
             }
         }

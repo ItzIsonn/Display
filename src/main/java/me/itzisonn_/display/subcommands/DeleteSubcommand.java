@@ -14,12 +14,12 @@ public class DeleteSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 1) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
             return;
         }
 
@@ -30,7 +30,7 @@ public class DeleteSubcommand extends AbstractSubcommand {
             }
             plugin.getDisplaysMap().clear();
 
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("delete.all", null, player));
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getDeleteAll().getComponent(player));
         }
         else {
             int id;
@@ -38,21 +38,21 @@ public class DeleteSubcommand extends AbstractSubcommand {
                 id = Integer.parseInt(args[0]);
             }
             catch (NumberFormatException ignore) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidId", args[0], player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[0]));
                 return;
             }
 
             Entity entity = plugin.getDisplaysMap().get(id);
 
             if (!plugin.getDisplaysMap().containsKey(id) || entity.isDead()) {
-                player.sendMessage(plugin.getConfigManager().getError("idDoesNotExist", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
                 return;
             }
 
             entity.remove();
             plugin.getDisplaysMap().remove(id);
 
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("delete.id", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getDeleteId().getComponent(player, String.valueOf(id)));
         }
     }
 

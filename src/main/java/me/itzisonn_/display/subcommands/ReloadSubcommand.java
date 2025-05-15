@@ -13,7 +13,7 @@ public class ReloadSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 0) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
@@ -22,7 +22,7 @@ public class ReloadSubcommand extends AbstractSubcommand {
         plugin.getScheduler().cancel();
         plugin.startTextUpdating();
 
-        player.sendMessage(plugin.getConfigManager().getSuccessfully("reload", null, player));
+        player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getReload().getComponent(player));
     }
 
     @Override

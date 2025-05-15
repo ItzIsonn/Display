@@ -13,11 +13,11 @@ public class HelpSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 0) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
-        plugin.getConfigManager().getInfo().forEach(player::sendMessage);
+        plugin.getConfigManager().getGlobalMessagesSection().getInfo().forEach(player::sendMessage);
     }
 
     @Override

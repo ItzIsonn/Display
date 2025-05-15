@@ -22,17 +22,17 @@ public class LoadSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 2) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundUuid", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundUuid().getComponent(player));
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
             return;
         }
 
@@ -41,12 +41,12 @@ public class LoadSubcommand extends AbstractSubcommand {
             id = Integer.parseInt(args[1]);
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidId", args[1], player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[1]));
             return;
         }
 
         if (plugin.getDisplaysMap().containsKey(id)) {
-            player.sendMessage(plugin.getConfigManager().getError("idAlreadyInUse", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
             return;
         }
 
@@ -55,17 +55,17 @@ public class LoadSubcommand extends AbstractSubcommand {
             Entity entity = Bukkit.getEntity(UUID.fromString(args[0]));
             if (entity instanceof Display displayEntity) display = displayEntity;
             else {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEntity", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEntity().getComponent(player, id));
                 return;
             }
         }
         catch (IllegalArgumentException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidUuid", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidUuid().getComponent(player, id));
             return;
         }
 
         if (plugin.getDisplaysMap().containsValue(display)) {
-            player.sendMessage(plugin.getConfigManager().getError("entityAlreadyInUse", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getEntityAlreadyInUse().getComponent(player, id));
             return;
         }
 
@@ -73,7 +73,9 @@ public class LoadSubcommand extends AbstractSubcommand {
         PersistentDataContainer data = display.getPersistentDataContainer();
         data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 
-        player.sendMessage(plugin.getConfigManager().getSuccessfully("load", String.valueOf(id), player, Placeholder.parsed("uuid", args[0])));
+        player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getLoad().getComponent(player,
+                Placeholder.parsed("id", String.valueOf(id)),
+                Placeholder.parsed("uuid", args[0])));
     }
 
     @Override

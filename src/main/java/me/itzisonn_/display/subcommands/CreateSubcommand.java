@@ -3,10 +3,8 @@ package me.itzisonn_.display.subcommands;
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -23,22 +21,22 @@ public class CreateSubcommand extends AbstractSubcommand {
     @SuppressWarnings("deprecation")
     public void onCommand(Player player, String[] args) {
         if (args.length > 3) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundObjectType", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundObjectType().getComponent(player));
             return;
         }
 
         if (!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("item") && !args[0].equalsIgnoreCase("text") && !args[0].equalsIgnoreCase("clone")) {
-            player.sendMessage(plugin.getConfigManager().getError("unknownObjectType", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownObjectType().getComponent(player));
             return;
         }
 
         if (args.length < 2) {
-            player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
             return;
         }
 
@@ -47,19 +45,19 @@ public class CreateSubcommand extends AbstractSubcommand {
             id = Integer.parseInt(args[1]);
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidId", args[1], player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[1]));
             return;
         }
 
 
         if (args[0].equalsIgnoreCase("clone")) {
             if (plugin.getDisplaysMap().containsKey(id)) {
-                player.sendMessage(plugin.getConfigManager().getError("idAlreadyInUse", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
                 return;
             }
 
             if (args.length < 3) {
-                player.sendMessage(plugin.getConfigManager().getError("notFoundId", null, player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
                 return;
             }
 
@@ -68,61 +66,67 @@ public class CreateSubcommand extends AbstractSubcommand {
                 cloneId = Integer.parseInt(args[2]);
             }
             catch (NumberFormatException ignore) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidId", args[2], player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[2]));
                 return;
             }
             Display cloneEntity = plugin.getDisplaysMap().get(cloneId);
 
             if (!plugin.getDisplaysMap().containsKey(cloneId) || cloneEntity.isDead()) {
-                player.sendMessage(plugin.getConfigManager().getError("idDoesNotExist", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
                 return;
             }
 
-
             Location location = player.getLocation();
-
             Display entity = null;
 
             switch (cloneEntity.getType()) {
                 case BLOCK_DISPLAY -> {
                     location = new Location(location.getWorld(), location.getX() - 0.5, location.getY(), location.getZ() - 0.5);
-                    entity = (BlockDisplay) location.getWorld().spawnEntity(location, EntityType.BLOCK_DISPLAY);
 
-                    ((BlockDisplay) entity).setBlock(((BlockDisplay) cloneEntity).getBlock());
-                    entity.setGlowing(cloneEntity.isGlowing());
-                    entity.setGlowColorOverride(cloneEntity.getGlowColorOverride());
+                    entity = location.getWorld().spawn(location, BlockDisplay.class, blockDisplay -> {
+                        blockDisplay.setBlock(((BlockDisplay) cloneEntity).getBlock());
+                        blockDisplay.setGlowing(cloneEntity.isGlowing());
+                        blockDisplay.setGlowColorOverride(cloneEntity.getGlowColorOverride());
+                    });
                 }
 
                 case ITEM_DISPLAY -> {
                     location = new Location(location.getWorld(), location.getX(), location.getY() + 0.5, location.getZ());
-                    entity = (ItemDisplay) location.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
 
-                    ((ItemDisplay) entity).setItemStack(((ItemDisplay) cloneEntity).getItemStack());
-                    entity.setGlowing(cloneEntity.isGlowing());
-                    entity.setGlowColorOverride(cloneEntity.getGlowColorOverride());
-                    ((ItemDisplay) entity).setItemDisplayTransform(((ItemDisplay) cloneEntity).getItemDisplayTransform());
+                    entity = location.getWorld().spawn(location, ItemDisplay.class, itemDisplay -> {
+                        itemDisplay.setItemStack(((ItemDisplay) cloneEntity).getItemStack());
+                        itemDisplay.setGlowing(cloneEntity.isGlowing());
+                        itemDisplay.setGlowColorOverride(cloneEntity.getGlowColorOverride());
+                        itemDisplay.setItemDisplayTransform(((ItemDisplay) cloneEntity).getItemDisplayTransform());
+                    });
                 }
 
                 case TEXT_DISPLAY -> {
                     location = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
-                    entity = (TextDisplay) location.getWorld().spawnEntity(location, EntityType.TEXT_DISPLAY);
 
                     String cloneText = cloneEntity.getPersistentDataContainer().get(plugin.getNskDisplayText(), PersistentDataType.STRING);
-                    assert cloneText != null;
+                    if (cloneText == null) cloneText = plugin.getConfigManager().getDefaultValuesSection().getText();
+                    String finalCloneText = cloneText;
 
-                    PersistentDataContainer data = entity.getPersistentDataContainer();
-                    data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, cloneText);
-                    ((TextDisplay) entity).text(Component.text(cloneText));
+                    entity = location.getWorld().spawn(location, TextDisplay.class, textDisplay -> {
+                        PersistentDataContainer data = textDisplay.getPersistentDataContainer();
+                        data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, finalCloneText);
+                        textDisplay.text(Component.text(finalCloneText));
 
-                    ((TextDisplay) entity).setAlignment(((TextDisplay) cloneEntity).getAlignment());
-                    ((TextDisplay) entity).setBackgroundColor(((TextDisplay) cloneEntity).getBackgroundColor());
-                    ((TextDisplay) entity).setLineWidth(((TextDisplay) cloneEntity).getLineWidth());
-                    ((TextDisplay) entity).setSeeThrough(((TextDisplay) cloneEntity).isSeeThrough());
-                    ((TextDisplay) entity).setTextOpacity(((TextDisplay) cloneEntity).getTextOpacity());
+                        textDisplay.setAlignment(((TextDisplay) cloneEntity).getAlignment());
+                        textDisplay.setBackgroundColor(((TextDisplay) cloneEntity).getBackgroundColor());
+                        textDisplay.setLineWidth(((TextDisplay) cloneEntity).getLineWidth());
+                        textDisplay.setSeeThrough(((TextDisplay) cloneEntity).isSeeThrough());
+                        textDisplay.setTextOpacity(((TextDisplay) cloneEntity).getTextOpacity());
+                    });
                 }
             }
 
-            assert entity != null;
+            if (entity == null) {
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEntity().getComponent(player, id));
+                return;
+            }
+
             entity.setTransformation(cloneEntity.getTransformation());
             entity.setBillboard(cloneEntity.getBillboard());
             entity.setBrightness(cloneEntity.getBrightness());
@@ -134,64 +138,62 @@ public class CreateSubcommand extends AbstractSubcommand {
             PersistentDataContainer data = entity.getPersistentDataContainer();
             data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("create.clone", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getCreateClone().getComponent(player, id));
+            return;
         }
 
-        else {
-            if (args.length > 2) {
-                player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
-                return;
+        if (args.length > 2) {
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
+            return;
+        }
+
+        if (plugin.getDisplaysMap().containsKey(id)) {
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
+            return;
+        }
+
+
+        Display entity = null;
+        Location location = player.getLocation();
+
+        switch (args[0]) {
+            case "block" -> {
+                location = new Location(location.getWorld(), location.getX() - 0.5, location.getY(), location.getZ() - 0.5);
+
+                entity = player.getWorld().spawn(location, BlockDisplay.class, blockDisplay ->
+                        blockDisplay.setBlock(Bukkit.createBlockData(plugin.getConfigManager().getDefaultValuesSection().getBlock())));
             }
 
-            if (plugin.getDisplaysMap().containsKey(id)) {
-                player.sendMessage(plugin.getConfigManager().getError("idAlreadyInUse", String.valueOf(id), player));
-                return;
+            case "item" -> {
+                location = new Location(location.getWorld(), location.getX(), location.getY() + 0.5, location.getZ());
+
+                entity = player.getWorld().spawn(location, ItemDisplay.class, itemDisplay ->
+                        itemDisplay.setItemStack(new ItemStack(plugin.getConfigManager().getDefaultValuesSection().getItem())));
             }
 
+            case "text" -> {
+                location = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
 
-            Display entity = null;
-            Location location = player.getLocation();
+                entity = player.getWorld().spawn(location, TextDisplay.class, textDisplay -> {
+                    PersistentDataContainer data = textDisplay.getPersistentDataContainer();
 
-            switch (args[0]) {
-                case "block" -> {
-                    location = new Location(location.getWorld(), location.getX() - 0.5, location.getY(), location.getZ() - 0.5);
-                    entity = (BlockDisplay) player.getWorld().spawnEntity(location, EntityType.BLOCK_DISPLAY);
-                    try {
-                        ((BlockDisplay) entity).setBlock(Bukkit.createBlockData(Material.valueOf(plugin.getConfigManager().getDefaultValue("block").toUpperCase())));
-                    }
-                    catch (IllegalArgumentException ignore) {
-                        ((BlockDisplay) entity).setBlock(Bukkit.createBlockData(Material.STONE));
-                    }
-                }
-
-                case "item" -> {
-                    location = new Location(location.getWorld(), location.getX(), location.getY() + 0.5, location.getZ());
-                    entity = (ItemDisplay) player.getWorld().spawnEntity(location, EntityType.ITEM_DISPLAY);
-                    try {
-                        ((ItemDisplay) entity).setItemStack(new ItemStack(Material.valueOf(plugin.getConfigManager().getDefaultValue("item").toUpperCase())));
-                    }
-                    catch (IllegalArgumentException ignore) {
-                        ((ItemDisplay) entity).setItemStack(new ItemStack(Material.APPLE));
-                    }
-                }
-
-                case "text" -> {
-                    location = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
-                    entity = (TextDisplay) player.getWorld().spawnEntity(location, EntityType.TEXT_DISPLAY);
-                    PersistentDataContainer data = entity.getPersistentDataContainer();
-                    String text = plugin.getConfigManager().getDefaultValue("text");
+                    String text = plugin.getConfigManager().getDefaultValuesSection().getText();
                     data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, text);
-                    ((TextDisplay) entity).text(MiniMessage.miniMessage().deserialize(text));
-                }
+                    textDisplay.text(plugin.getMiniMessage().deserialize(text));
+                });
             }
-
-            assert entity != null;
-            plugin.getDisplaysMap().put(id, entity);
-            PersistentDataContainer data = entity.getPersistentDataContainer();
-            data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
-
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("create.new", String.valueOf(id), player));
         }
+
+        if (entity == null) {
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownObjectType().getComponent(player));
+            return;
+        }
+
+        plugin.getDisplaysMap().put(id, entity);
+        PersistentDataContainer data = entity.getPersistentDataContainer();
+        data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
+
+        player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getCreateNew().getComponent(player, id));
     }
 
     @Override

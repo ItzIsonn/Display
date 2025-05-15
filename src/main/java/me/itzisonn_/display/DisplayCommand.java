@@ -1,7 +1,6 @@
 package me.itzisonn_.display;
 
 import me.itzisonn_.display.subcommands.*;
-import me.itzisonn_.display.subcommands.EditSubcommand;
 import org.bukkit.command.*;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +36,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(plugin.getConfigManager().getError("onlyPlayer", null, null));
+            sender.sendMessage(plugin.getConfigManager().getErrorsSection().getOnlyPlayer().getComponent());
             return true;
         }
 
@@ -46,19 +45,19 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
                 if (player.hasPermission("display." + subcommand.getName())) break;
             }
 
-            player.sendMessage(plugin.getConfigManager().getError("noPermission", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNoPermission().getComponent(player));
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(plugin.getConfigManager().getError("notFull", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFull().getComponent(player));
             return true;
         }
 
         for (AbstractSubcommand subcommand : subcommands) {
             if (args[0].equalsIgnoreCase(subcommand.getName())) {
                 if (!player.hasPermission("display.*") && !player.hasPermission("display." + subcommand.getName())) {
-                    player.sendMessage(plugin.getConfigManager().getError("unknownAction", null, player));
+                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownAction().getComponent(player));
                     return true;
                 }
                 subcommand.onCommand(player, Arrays.copyOfRange(args, 1, args.length));
@@ -66,7 +65,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        player.sendMessage(plugin.getConfigManager().getError("unknownAction", null, player));
+        player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownAction().getComponent(player));
         return true;
     }
 

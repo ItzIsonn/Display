@@ -1,9 +1,7 @@
 package me.itzisonn_.display.subcommands.edit_types;
 
 import com.google.common.collect.Lists;
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.itzisonn_.display.DisplayPlugin;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -22,7 +20,8 @@ public class TextEditType extends AbstractEditType {
     @Override
     public boolean onCommand(Player player, String value, Display entity, int id) {
         if (value.equals("?")) {
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "text"),
                     Placeholder.parsed("value", plugin.getPlayersEditingMap().containsKey(player.getUniqueId().toString()) ? "on" : "off")));
             return false;
@@ -32,7 +31,7 @@ public class TextEditType extends AbstractEditType {
         if (value.equalsIgnoreCase("on")) isText = true;
         else if (value.equalsIgnoreCase("off")) isText = false;
         else {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
 
@@ -43,12 +42,11 @@ public class TextEditType extends AbstractEditType {
             String text = data.get(plugin.getNskDisplayText(), PersistentDataType.STRING);
 
             if (text != null) {
-                String message = "<click:copy_to_clipboard:'" + text + "'><click:suggest_command:'" + text + "'><hover:show_text:'";
+                String message = "<click:copy_to_clipboard:'" + text + "'><click:suggest_command:'" + text + "'><hover:show_text:'" +
+                        plugin.parsePlaceholders(player, text) + "'>";
 
-                if (plugin.isHookedPapi()) message += PlaceholderAPI.setPlaceholders(player, text);
-                else message += text;
-
-                player.sendMessage(MiniMessage.miniMessage().deserialize(message + "'>" + plugin.getConfigManager().getEditingText()));
+                player.sendMessage(plugin.getMiniMessage().deserialize(message)
+                                .append(plugin.getConfigManager().getGlobalMessagesSection().getEditingText().getComponent(player, id)));
             }
 
         }

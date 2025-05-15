@@ -19,7 +19,8 @@ public class LineWidthEditType extends AbstractEditType {
     @Override
     public boolean onCommand(Player player, String value, Display entity, int id) {
         if (value.equals("?")) {
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "line_width"),
                     Placeholder.parsed("value", String.valueOf(((TextDisplay) entity).getLineWidth()))));
             return false;
@@ -30,7 +31,7 @@ public class LineWidthEditType extends AbstractEditType {
             return true;
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }

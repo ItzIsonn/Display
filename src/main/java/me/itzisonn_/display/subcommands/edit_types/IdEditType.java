@@ -28,7 +28,7 @@ public class IdEditType extends AbstractEditType {
             return true;
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }

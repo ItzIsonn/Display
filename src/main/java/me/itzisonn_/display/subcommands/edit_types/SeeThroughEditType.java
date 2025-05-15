@@ -19,14 +19,15 @@ public class SeeThroughEditType extends AbstractEditType {
     @Override
     public boolean onCommand(Player player, String value, Display entity, int id) {
         if (value.equals("?")) {
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "see_through"),
                     Placeholder.parsed("value", String.valueOf(((TextDisplay) entity).isSeeThrough()))));
             return false;
         }
 
         if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
 

@@ -1,7 +1,7 @@
 package me.itzisonn_.display.subcommands;
 
 import me.itzisonn_.display.DisplayPlugin;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
@@ -16,24 +16,28 @@ public class ListSubcommand extends AbstractSubcommand {
     @Override
     public void onCommand(Player player, String[] args) {
         if (args.length > 0) {
-            player.sendMessage(plugin.getConfigManager().getError("tooManyArguments", null, player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
 
         if (plugin.getDisplaysMap().isEmpty()) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListEmpty(), Placeholder.parsed("prefix", plugin.getConfigManager().getPrefix())));
+            player.sendMessage(plugin.getConfigManager().getListSection().getEmpty().getComponent(player));
             return;
         }
 
-        player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListTitle(), Placeholder.parsed("prefix", plugin.getConfigManager().getPrefix())));
+        player.sendMessage(plugin.getConfigManager().getListSection().getTitle().getComponent(player));
         int pos = 1;
         for (int id : plugin.getDisplaysMap().keySet()) {
             Display entity = plugin.getDisplaysMap().get(id);
-            player.sendMessage(MiniMessage.miniMessage().deserialize(plugin.getConfigManager().getListFormat(),
+
+            Component component = plugin.getConfigManager().getListSection().getFormat().getComponent(player,
                     Placeholder.parsed("pos", String.valueOf(pos)),
                     Placeholder.parsed("type", entity.getType().name()),
-                    Placeholder.parsed("id", String.valueOf(id))));
+                    Placeholder.parsed("id", String.valueOf(id))
+            );
+            player.sendMessage(component);
+
             pos++;
         }
     }

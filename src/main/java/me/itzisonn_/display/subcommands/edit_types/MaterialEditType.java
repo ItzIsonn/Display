@@ -22,7 +22,8 @@ public class MaterialEditType extends AbstractEditType {
             String infoValue = "?";
             if (entity instanceof BlockDisplay blockDisplay) infoValue = blockDisplay.getBlock().getMaterial().toString();
             else if (entity instanceof ItemDisplay itemDisplay && itemDisplay.getItemStack() != null) infoValue = itemDisplay.getItemStack().getType().toString();
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "material"),
                     Placeholder.parsed("value", infoValue)));
             return false;
@@ -33,17 +34,17 @@ public class MaterialEditType extends AbstractEditType {
             material = Material.valueOf(value.toUpperCase());
         }
         catch (IllegalArgumentException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
 
         if (entity.getType() == EntityType.BLOCK_DISPLAY) {
             if (!material.isBlock()) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
                 return false;
             }
             if (material == Material.CAVE_AIR || material == Material.AIR || material == Material.BARRIER) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
                 return false;
             }
 
@@ -51,7 +52,7 @@ public class MaterialEditType extends AbstractEditType {
         }
         else if (entity.getType() == EntityType.ITEM_DISPLAY) {
             if (!material.isItem()) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
                 return false;
             }
 

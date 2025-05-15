@@ -1,7 +1,6 @@
 package me.itzisonn_.display;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public class EventManager implements Listener {
 
             PersistentDataContainer data = entity.getPersistentDataContainer();
             if (!data.has(plugin.getNskDisplayId(), PersistentDataType.INTEGER)) continue;
-            int id = data.get(plugin.getNskDisplayId(), PersistentDataType.INTEGER);
+            Integer id = data.get(plugin.getNskDisplayId(), PersistentDataType.INTEGER);
 
             if (plugin.getDisplaysMap().containsValue(entity)) continue;
 
@@ -43,7 +42,7 @@ public class EventManager implements Listener {
         if (!plugin.getPlayersEditingMap().containsKey(player.getUniqueId().toString())) return;
         e.setCancelled(true);
 
-        String message = MiniMessage.miniMessage().serialize(e.originalMessage()).replaceAll("\\\\<", "<");
+        String message = plugin.getMiniMessage().serialize(e.originalMessage()).replaceAll("\\\\<", "<");
         Entity entity = plugin.getDisplaysMap().get(plugin.getPlayersEditingMap().get(player.getUniqueId().toString()));
 
         PersistentDataContainer data = entity.getPersistentDataContainer();

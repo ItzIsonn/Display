@@ -19,7 +19,9 @@ public class GlowingEditType extends AbstractEditType {
         if (value.equals("?")) {
             String infoValue = entity.getGlowColorOverride() == null ? "255,255,255" :
                     entity.getGlowColorOverride().getRed() + "," + entity.getGlowColorOverride().getGreen() + "," + entity.getGlowColorOverride().getBlue();
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "glowing"),
                     Placeholder.parsed("value", entity.isGlowing() + ";" + infoValue)));
             return false;
@@ -30,7 +32,7 @@ public class GlowingEditType extends AbstractEditType {
         else {
             String[] color = value.split(",");
             if (color.length != 3) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
                 return false;
             }
 
@@ -38,7 +40,7 @@ public class GlowingEditType extends AbstractEditType {
                 entity.setGlowColorOverride(Color.fromRGB(Integer.parseInt(color[0]), Integer.parseInt(color[1]), Integer.parseInt(color[2])));
             }
             catch (NumberFormatException ignore) {
-                player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
                 return false;
             }
         }

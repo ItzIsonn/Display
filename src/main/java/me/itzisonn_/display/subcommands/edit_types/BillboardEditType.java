@@ -18,7 +18,8 @@ public class BillboardEditType extends AbstractEditType {
     @Override
     public boolean onCommand(Player player, String value, Display entity, int id) {
         if (value.equals("?")) {
-            player.sendMessage(plugin.getConfigManager().getSuccessfully("edit.info", String.valueOf(id), player,
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
+                    Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "billboard"),
                     Placeholder.parsed("value", entity.getBillboard().name())));
             return false;
@@ -29,7 +30,7 @@ public class BillboardEditType extends AbstractEditType {
             return true;
         }
         catch (IllegalArgumentException ignore) {
-            player.sendMessage(plugin.getConfigManager().getError("invalidEditValue", String.valueOf(id), player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }
