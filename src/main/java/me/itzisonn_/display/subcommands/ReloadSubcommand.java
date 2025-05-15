@@ -18,6 +18,7 @@ public class ReloadSubcommand extends AbstractSubcommand {
         }
 
         plugin.getConfigManager().reloadConfig();
+        plugin.updateMiniMessage();
         plugin.hookPapi();
         plugin.getScheduler().cancel();
         plugin.startTextUpdating();

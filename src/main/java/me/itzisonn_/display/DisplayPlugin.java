@@ -35,12 +35,11 @@ public class DisplayPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        configManager = new ConfigManager(this);
         saveDefaultConfig();
+        configManager = new ConfigManager(this);
 
         configManager.getGlobalMessagesSection().getPrefix().updateValue();
-        TagResolver prefixResolver = TagResolver.resolver("prefix", Tag.inserting(configManager.getGlobalMessagesSection().getPrefix().getComponent()));
-        miniMessage = MiniMessage.builder().editTags(builder -> builder.resolver(prefixResolver)).build();
+        updateMiniMessage();
 
         configManager.reloadConfig();
 
@@ -115,5 +114,10 @@ public class DisplayPlugin extends JavaPlugin {
     public MiniMessage getMiniMessage() {
         if (miniMessage == null) return MiniMessage.miniMessage();
         return miniMessage;
+    }
+
+    public void updateMiniMessage() {
+        TagResolver prefixResolver = TagResolver.resolver("prefix", Tag.inserting(configManager.getGlobalMessagesSection().getPrefix().getComponent()));
+        miniMessage = MiniMessage.builder().editTags(builder -> builder.resolver(prefixResolver)).build();
     }
 }

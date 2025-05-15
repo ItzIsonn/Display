@@ -17,6 +17,7 @@ public class EditSubcommand extends AbstractSubcommand {
                 new IdEditType(plugin),
                 new ScaleEditType(plugin),
                 new RotationEditType(plugin),
+                new TranslationEditType(plugin),
                 new BillboardEditType(plugin),
                 new BrightnessEditType(plugin),
                 new ShadowEditType(plugin),
