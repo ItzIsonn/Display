@@ -11,18 +11,18 @@ import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
 
-public class BackgroundEditType extends AbstractEditType<TextDisplay> {
+public class BackgroundEditType extends AbstractEditType {
     public BackgroundEditType(DisplayPlugin plugin) {
-        super(plugin, "background");
+        super(plugin, "background", 3, EntityType.TEXT_DISPLAY);
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
-        TextDisplay entity = displayData.getDisplay();
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
+        if (!(displayData.getDisplay() instanceof TextDisplay entity)) return true;
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args.length == 1 && args[0].equals("?")) {
             String infoValue = entity.getBackgroundColor() == null ? "255,255,255" :
                     entity.getBackgroundColor().getRed() + "," + entity.getBackgroundColor().getGreen() + "," + entity.getBackgroundColor().getBlue();
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
@@ -32,24 +32,44 @@ public class BackgroundEditType extends AbstractEditType<TextDisplay> {
             return false;
         }
 
-        String[] color = value.split(",");
-        if (color.length != 3) {
-            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
-            return false;
-        }
-
         try {
-            entity.setBackgroundColor(Color.fromRGB(Integer.parseInt(color[0]), Integer.parseInt(color[1]), Integer.parseInt(color[2])));
+            entity.setBackgroundColor(Color.fromRGB(
+                    Integer.parseInt(args[0]),
+                    Integer.parseInt(args[1]),
+                    Integer.parseInt(args[2])
+            ));
             return true;
         }
-        catch (NumberFormatException ignore) {
+        catch (NumberFormatException | IndexOutOfBoundsException ignore) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
-        return Lists.newArrayList("<r>,<g>,<b>", "?");
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
+        return switch (args.length) {
+            case 1 -> Lists.newArrayList("<r>", "?");
+            case 2 -> {
+                try {
+                    Integer.parseInt(args[0]);
+                    yield Lists.newArrayList("<g>");
+                }
+                catch (NumberFormatException ignore) {
+                    yield new ArrayList<>();
+                }
+            }
+            case 3 -> {
+                try {
+                    Integer.parseInt(args[0]);
+                    Integer.parseInt(args[1]);
+                    yield Lists.newArrayList("<b>");
+                }
+                catch (NumberFormatException ignore) {
+                    yield new ArrayList<>();
+                }
+            }
+            default -> new ArrayList<>();
+        };
     }
 }

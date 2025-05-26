@@ -4,12 +4,14 @@
 ###---------------------------###
 
 # Использовать ли PlaceholderAPI
+# Позволяет использовать плейсхолдеры в TextDisplay сущностях
 enablePapi: false
 
 # Использовать ли ProtocolLib
+# Позволяет показывать для каждого игрока его плейсхолдеры в TextDisplay сущностях
 enableProtocolLib: false
 
-# Как часто будет обновляться текст на Text Display сущностях (в тиках, 0 - не обновлять)
+# Интервал между обновлениями текста на TextDisplay сущностях (в тиках, 0 - не обновлять)
 textUpdateInterval: 20
 
 # Значения по умолчанию, которые будут выставляться при создании сущности
@@ -31,21 +33,21 @@ messages:
     - "<#adf3fd>/display load <uuid> <id> <#8e8e8e>- <#d0d0d0>Добавить существующую Display-сущность в список под ID <id>"
     - "<#adf3fd>/display delete [<id> | *] <#8e8e8e>- <#d0d0d0>Удалить объект (или все объекты) с ID <id>"
     - "<#adf3fd>/display list <#8e8e8e>- <#d0d0d0>Посмотреть список всех объектов"
-    - "<#adf3fd>/display edit <id> <type> <value> <#8e8e8e>- <#d0d0d0>Изменить параметр <type> на значение <value> у объекта с ID <id>"
+    - "<#adf3fd>/display edit <id> <type> <values>... <#8e8e8e>- <#d0d0d0>Изменить параметр <type> на значения <values>... у объекта с ID <id>"
     - "  <#c0c4fd>• id <new_id> <#8e8e8e>- <#d0d0d0>Изменить ID объекта на другой"
-    - "  <#c0c4fd>• scale <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить размеры объекта на указанные"
-    - "  <#c0c4fd>• rotation <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить поворот объекта на указанные углы в градусах"
-    - "  <#c0c4fd>• translation <x>,<y>,<z> <#8e8e8e>- <#d0d0d0>Изменить смещение объекта на указанное"
+    - "  <#c0c4fd>• scale <x> <y> <z> <#8e8e8e>- <#d0d0d0>Изменить размеры объекта на указанные"
+    - "  <#c0c4fd>• rotation <x> <y> <z> <#8e8e8e>- <#d0d0d0>Изменить поворот объекта на указанные углы в градусах"
+    - "  <#c0c4fd>• translation <x> <y> <z> <#8e8e8e>- <#d0d0d0>Изменить смещение объекта на указанное"
     - "  <#c0c4fd>• billboard <billboard> <#8e8e8e>- <#d0d0d0>Изменить режим поворота объекта"
-    - "  <#c0c4fd>• brightness <block>,<sky> <#8e8e8e>- <#d0d0d0>Изменить яркость объекта"
-    - "  <#c0c4fd>• shadow <radius>,<strength> <#8e8e8e>- <#d0d0d0>Изменить радиус и силу тени объекта"
+    - "  <#c0c4fd>• brightness <block> <sky> <#8e8e8e>- <#d0d0d0>Изменить яркость объекта"
+    - "  <#c0c4fd>• shadow <radius> <strength> <#8e8e8e>- <#d0d0d0>Изменить радиус и силу тени объекта"
     - "  <#c0c4fd>• view_range <range> <#8e8e8e>- <#d0d0d0>Изменить дальность прорисовки сущности"
     - "  <#c0c4fd>• material <material> <#8e8e8e>- <#d0d0d0>Изменить материал. Только для block и item"
-    - "  <#c0c4fd>• glowing [on | off | <r>,<g>,\\<b>] <#8e8e8e>- <#d0d0d0>Изменить подсветку. Только для block и item"
+    - "  <#c0c4fd>• glowing [on | off | <r> <g> \\<b>] <#8e8e8e>- <#d0d0d0>Изменить подсветку. Только для block и item"
     - "  <#c0c4fd>• display_transform <transform> <#8e8e8e>- <#d0d0d0>Изменить режим отображения объекта. Только для item"
     - "  <#c0c4fd>• text [on | off] <#8e8e8e>- <#d0d0d0>Начать редактирование текста через чат. Только для text"
     - "  <#c0c4fd>• alignment <alignment> <#8e8e8e>- <#d0d0d0>Изменить выравнивание текста. Только для text"
-    - "  <#c0c4fd>• background <r>,<g>,\\<b> <#8e8e8e>- <#d0d0d0>Изменить цвет фона. Только для text"
+    - "  <#c0c4fd>• background <r> <g> \\<b> <#8e8e8e>- <#d0d0d0>Изменить цвет фона. Только для text"
     - "  <#c0c4fd>• line_width <width> <#8e8e8e>- <#d0d0d0>Изменить ширину строки. Только для text"
     - "  <#c0c4fd>• see_through [true | false] <#8e8e8e>- <#d0d0d0>Изменить отображение объекта через блоки. Только для text"
     - "  <#c0c4fd>• text_opacity <opacity> <#8e8e8e>- <#d0d0d0>Изменить прозрачность текста. Только для text"
@@ -87,7 +89,7 @@ messages:
     create:
       new: "<prefix> Новый объект для отображения с <green>ID <id></green> успешно создан!"
       clone: "<prefix> Объект с <green>ID <id></green> успешно клонирован!"
-      # Используйте <uuid> для UUID сущности
+      # Используйте <uuid> для UUID сущности (только для этой строчки)
     load: "<prefix> Сущность с <green>UUID <uuid></green> успешно добавлена в список под <green>ID <id></green>!"
     delete:
       id: "<prefix> Объект с <green>ID <id></green> успешно удалён!"

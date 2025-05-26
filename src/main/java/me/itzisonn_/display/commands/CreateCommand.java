@@ -145,7 +145,7 @@ public class CreateCommand extends AbstractCommand {
             PersistentDataContainer data = entity.getPersistentDataContainer();
             data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 
-            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getCreateClone().getComponent(player, id));
+            player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getCreateClone().getComponent(player, cloneId));
             return;
         }
 

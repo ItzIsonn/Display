@@ -5,25 +5,23 @@ import me.itzisonn_.display.DisplayPlugin;
 import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class TranslationEditType extends AbstractMultipleEditType {
+public class TranslationEditType extends AbstractEditType {
     public TranslationEditType(DisplayPlugin plugin) {
-        super(plugin, "translation", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
+        super(plugin, "translation", 3);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
         Display entity = displayData.getDisplay();
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args.length == 1 && args[0].equals("?")) {
             Vector3f translation = entity.getTransformation().getTranslation();
 
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
@@ -33,20 +31,14 @@ public class TranslationEditType extends AbstractMultipleEditType {
             return false;
         }
 
-        String[] translation = value.split(",");
-        if (translation.length != 3) {
-            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
-            return false;
-        }
-
         try {
             Transformation oldTransformation = entity.getTransformation();
 
             entity.setTransformation(new Transformation(
                     new Vector3f(
-                            Float.parseFloat(translation[0]),
-                            Float.parseFloat(translation[1]),
-                            Float.parseFloat(translation[2])
+                            Float.parseFloat(args[0]),
+                            Float.parseFloat(args[1]),
+                            Float.parseFloat(args[2])
                     ),
                     oldTransformation.getLeftRotation(),
                     oldTransformation.getScale(),
@@ -55,14 +47,36 @@ public class TranslationEditType extends AbstractMultipleEditType {
 
             return true;
         }
-        catch (NumberFormatException ignore) {
+        catch (NumberFormatException | IndexOutOfBoundsException ignore) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
-        return Lists.newArrayList("<x>,<y>,<z>", "?");
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
+        return switch (args.length) {
+            case 1 -> Lists.newArrayList("<x>", "?");
+            case 2 -> {
+                try {
+                    Float.parseFloat(args[0]);
+                    yield Lists.newArrayList("<y>");
+                }
+                catch (NumberFormatException ignore) {
+                    yield new ArrayList<>();
+                }
+            }
+            case 3 -> {
+                try {
+                    Float.parseFloat(args[0]);
+                    Float.parseFloat(args[1]);
+                    yield Lists.newArrayList("<z>");
+                }
+                catch (NumberFormatException ignore) {
+                    yield new ArrayList<>();
+                }
+            }
+            default -> new ArrayList<>();
+        };
     }
 }

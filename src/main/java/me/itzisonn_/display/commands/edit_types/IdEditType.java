@@ -3,24 +3,21 @@ package me.itzisonn_.display.commands.edit_types;
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
 import me.itzisonn_.display.manager.DisplayData;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class IdEditType extends AbstractMultipleEditType {
+public class IdEditType extends AbstractEditType {
     public IdEditType(DisplayPlugin plugin) {
-        super(plugin, "id", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
+        super(plugin, "id", 1);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
         try {
-            int newId = Integer.parseInt(value);
+            int newId = Integer.parseInt(args[0]);
             displayData.setId(newId);
 
             PersistentDataContainer data = displayData.getDisplay().getPersistentDataContainer();
@@ -34,7 +31,7 @@ public class IdEditType extends AbstractMultipleEditType {
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
         return Lists.newArrayList("<new_id>");
     }
 }

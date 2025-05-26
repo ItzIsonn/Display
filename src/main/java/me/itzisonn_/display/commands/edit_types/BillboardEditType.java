@@ -1,27 +1,24 @@
 package me.itzisonn_.display.commands.edit_types;
 
 import me.itzisonn_.display.DisplayPlugin;
-import me.itzisonn_.display.Utils;
 import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class BillboardEditType extends AbstractMultipleEditType {
+public class BillboardEditType extends AbstractEditType {
     public BillboardEditType(DisplayPlugin plugin) {
-        super(plugin, "billboard", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
+        super(plugin, "billboard", 1);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
         Display entity = displayData.getDisplay();
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "billboard"),
@@ -30,7 +27,7 @@ public class BillboardEditType extends AbstractMultipleEditType {
         }
 
         try {
-            entity.setBillboard(Display.Billboard.valueOf(value.toUpperCase()));
+            entity.setBillboard(Display.Billboard.valueOf(args[0].toUpperCase()));
             return true;
         }
         catch (IllegalArgumentException ignore) {
@@ -40,9 +37,19 @@ public class BillboardEditType extends AbstractMultipleEditType {
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
-        ArrayList<String> list = Utils.getBillBoardList();
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
+        ArrayList<String> list = getBillBoardList();
         list.add("?");
+        return list;
+    }
+
+
+
+    private static ArrayList<String> getBillBoardList() {
+        ArrayList<String> list = new ArrayList<>();
+        for (Display.Billboard billboard : Display.Billboard.values()) {
+            list.add(billboard.name().toLowerCase());
+        }
         return list;
     }
 }

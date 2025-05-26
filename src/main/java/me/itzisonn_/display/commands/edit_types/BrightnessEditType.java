@@ -5,23 +5,21 @@ import me.itzisonn_.display.DisplayPlugin;
 import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class BrightnessEditType extends AbstractMultipleEditType {
+public class BrightnessEditType extends AbstractEditType {
     public BrightnessEditType(DisplayPlugin plugin) {
-        super(plugin, "brightness", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
+        super(plugin, "brightness", 2);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
         Display entity = displayData.getDisplay();
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args.length == 1 && args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "brightness"),
@@ -29,24 +27,33 @@ public class BrightnessEditType extends AbstractMultipleEditType {
             return false;
         }
 
-        String[] brightness = value.split(",");
-        if (brightness.length != 2) {
-            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
-            return false;
-        }
-
         try {
-            entity.setBrightness(new Display.Brightness(Integer.parseInt(brightness[0]), Integer.parseInt(brightness[1])));
+            entity.setBrightness(new Display.Brightness(
+                    Integer.parseInt(args[0]),
+                    Integer.parseInt(args[1])
+            ));
             return true;
         }
-        catch (IllegalArgumentException ignore) {
+        catch (IllegalArgumentException | IndexOutOfBoundsException ignore) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
-        return Lists.newArrayList("<block>,<sky>", "?");
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
+        return switch (args.length) {
+            case 1 -> Lists.newArrayList("<block>", "?");
+            case 2 -> {
+                try {
+                    Integer.parseInt(args[0]);
+                    yield Lists.newArrayList("<sky>");
+                }
+                catch (NumberFormatException ignore) {
+                    yield new ArrayList<>();
+                }
+            }
+            default -> new ArrayList<>();
+        };
     }
 }

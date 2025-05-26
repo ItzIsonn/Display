@@ -2,14 +2,15 @@ package me.itzisonn_.display.commands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
-import me.itzisonn_.display.Utils;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -82,11 +83,31 @@ public class LoadCommand extends AbstractCommand {
     public ArrayList<String> onTabComplete(Player player, String[] args) {
         if (args.length == 1) {
             ArrayList<String> list = Lists.newArrayList("<uuid>");
-            Display target = Utils.getTarget(player, 10);
+            Display target = getTarget(player);
             if (target != null) list.add(target.getUniqueId().toString());
             return list;
         }
+
         if (args.length == 2) return Lists.newArrayList("<id>");
         return new ArrayList<>();
+    }
+
+
+
+    private static Display getTarget(Player player) {
+        Vector step = player.getEyeLocation().clone().getDirection();
+        Location checkingLocation = player.getEyeLocation().clone();
+
+        int checkDistance = 10;
+        while (checkDistance >= 0) {
+            for (Entity entity : checkingLocation.getWorld().getNearbyEntities(checkingLocation, 0.5, 0.5, 0.5)) {
+                if (entity instanceof Display display) return display;
+            }
+
+            checkingLocation.add(step);
+            checkDistance--;
+        }
+
+        return null;
     }
 }

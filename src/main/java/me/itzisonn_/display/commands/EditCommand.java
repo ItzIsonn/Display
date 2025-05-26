@@ -5,12 +5,12 @@ import me.itzisonn_.display.manager.DisplayData;
 import me.itzisonn_.display.commands.edit_types.*;
 import org.bukkit.entity.*;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 public class EditCommand extends AbstractCommand {
-    private final Set<AbstractEditType<?>> editTypes;
+    private final Set<AbstractEditType> editTypes;
 
     public EditCommand(DisplayPlugin plugin) {
         super(plugin, "edit");
@@ -37,10 +37,9 @@ public class EditCommand extends AbstractCommand {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onCommand(Player player, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundUuid().getComponent(player));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getNotFoundId().getComponent(player));
             return;
         }
 
@@ -77,59 +76,28 @@ public class EditCommand extends AbstractCommand {
             return;
         }
 
-        StringBuilder valueBuilder = new StringBuilder();
-        for (int i = 2; i < args.length; i++) {
-            valueBuilder.append(args[i]);
-        }
-        String value = valueBuilder.toString();
-
-        for (AbstractEditType<?> editType : editTypes) {
+        for (AbstractEditType editType : editTypes) {
             if (!type.equals(editType.getName())) continue;
 
-            if (editType instanceof AbstractMultipleEditType multipleEditType) {
-                if (!multipleEditType.getEntityTypes().contains(entity.getType())) {
-                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditType().getComponent(player, id));
-                    return;
-                }
-            }
-            else {
-                if (!isOkay(editType, displayData)) {
-                    player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditType().getComponent(player, id));
-                    return;
-                }
+            if (!editType.getEntityTypes().contains(entity.getType())) {
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditType().getComponent(player, id));
+                return;
             }
 
-            Class<?> genericClass;
-            if (editType instanceof AbstractMultipleEditType) genericClass = (Class<?>) ((ParameterizedType) editType.getClass().getSuperclass().getGenericSuperclass()).getActualTypeArguments()[0];
-            else genericClass = (Class<?>) ((ParameterizedType) editType.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-
-            boolean shouldSendMessage;
-            if (genericClass.isAssignableFrom(BlockDisplay.class)) {
-                AbstractEditType<BlockDisplay> blockDisplayEditType = (AbstractEditType<BlockDisplay>) editType;
-                DisplayData<BlockDisplay> blockDisplayData = (DisplayData<BlockDisplay>) displayData;
-                shouldSendMessage = blockDisplayEditType.onCommand(player, value, blockDisplayData);
-            }
-            else if (genericClass.isAssignableFrom(ItemDisplay.class)) {
-                AbstractEditType<ItemDisplay> itemDisplayEditType = (AbstractEditType<ItemDisplay>) editType;
-                DisplayData<ItemDisplay> itemDisplayData = (DisplayData<ItemDisplay>) displayData;
-                shouldSendMessage = itemDisplayEditType.onCommand(player, value, itemDisplayData);
-            }
-            else if (genericClass.isAssignableFrom(TextDisplay.class)) {
-                AbstractEditType<TextDisplay> textDisplayEditType = (AbstractEditType<TextDisplay>) editType;
-                DisplayData<TextDisplay> textDisplayData = (DisplayData<TextDisplay>) displayData;
-                shouldSendMessage = textDisplayEditType.onCommand(player, value, textDisplayData);
-            }
-            else {
-                AbstractEditType<Display> displayEditType = (AbstractEditType<Display>) editType;
-                DisplayData<Display> defaultDisplayData = (DisplayData<Display>) displayData;
-                shouldSendMessage = displayEditType.onCommand(player, value, defaultDisplayData);
+            String[] editTypeArgs = Arrays.copyOfRange(args, 2, args.length);
+            if (editTypeArgs.length > editType.getMaxArgs()) {
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player, id));
+                return;
             }
 
+            boolean shouldSendMessage = editType.onCommand(player, displayData, editTypeArgs);
             if (shouldSendMessage) {
                 player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditEdit().getComponent(player, id));
             }
             return;
         }
+
+        player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditType().getComponent(player, id));
     }
 
     @Override
@@ -150,38 +118,25 @@ public class EditCommand extends AbstractCommand {
 
         if (args.length == 2) {
             ArrayList<String> arrayList = new ArrayList<>();
-            for (AbstractEditType<?> editType : editTypes) {
-                if (editType instanceof AbstractMultipleEditType multipleEditType) {
-                    if (multipleEditType.getEntityTypes().contains(type)) arrayList.add(editType.getName());
-                }
-                else {
-                    if (isOkay(editType, displayData)) arrayList.add(editType.getName());
-                }
+            for (AbstractEditType editType : editTypes) {
+                if (editType.getEntityTypes().contains(type)) arrayList.add(editType.getName());
             }
             return arrayList;
         }
 
-        if (args.length == 3) {
-            for (AbstractEditType<?> editType : editTypes) {
-                if (args[1].equalsIgnoreCase(editType.getName())) {
-                    if (editType instanceof AbstractMultipleEditType multipleEditType) {
-                        if (multipleEditType.getEntityTypes().contains(type)) return editType.onTabComplete(type);
-                    }
-                    else {
-                        if (isOkay(editType, displayData)) return editType.onTabComplete(type);
-                    }
-                    return new ArrayList<>();
-                }
+
+
+        for (AbstractEditType editType : editTypes) {
+            if (args[1].equalsIgnoreCase(editType.getName())) {
+                if (!editType.getEntityTypes().contains(type)) return new ArrayList<>();
+
+                String[] editTypeArgs = Arrays.copyOfRange(args, 2, args.length);
+                if (editTypeArgs.length > editType.getMaxArgs()) return new ArrayList<>();
+
+                return editType.onTabComplete(player, displayData, editTypeArgs);
             }
         }
 
         return new ArrayList<>();
-    }
-
-    private boolean isOkay(AbstractEditType<?> editType, DisplayData<?> displayData) {
-        Class<?> editTypeGeneric = (Class<?>) ((ParameterizedType) editType.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        Class<?> displayDataGeneric = displayData.getDisplay().getClass();
-
-        return editTypeGeneric.isAssignableFrom(displayDataGeneric);
     }
 }

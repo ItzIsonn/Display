@@ -12,17 +12,17 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 
-public class TextEditType extends AbstractEditType<TextDisplay> {
+public class TextEditType extends AbstractEditType {
     public TextEditType(DisplayPlugin plugin) {
-        super(plugin, "text");
+        super(plugin, "text", 1, EntityType.TEXT_DISPLAY);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
-        TextDisplay entity = displayData.getDisplay();
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
+        if (!(displayData.getDisplay() instanceof TextDisplay entity)) return true;
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "text"),
@@ -31,8 +31,8 @@ public class TextEditType extends AbstractEditType<TextDisplay> {
         }
 
         boolean isText;
-        if (value.equalsIgnoreCase("on")) isText = true;
-        else if (value.equalsIgnoreCase("off")) isText = false;
+        if (args[0].equalsIgnoreCase("on")) isText = true;
+        else if (args[0].equalsIgnoreCase("off")) isText = false;
         else {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
@@ -53,11 +53,12 @@ public class TextEditType extends AbstractEditType<TextDisplay> {
 
         }
         else plugin.getPlayersEditingMap().remove(player.getUniqueId().toString());
+
         return true;
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
         return Lists.newArrayList("on", "off", "?");
     }
 }

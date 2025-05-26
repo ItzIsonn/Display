@@ -1,7 +1,6 @@
 package me.itzisonn_.display.commands.edit_types;
 
 import me.itzisonn_.display.DisplayPlugin;
-import me.itzisonn_.display.Utils;
 import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.EntityType;
@@ -10,17 +9,17 @@ import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
 
-public class AlignmentEditType extends AbstractEditType<TextDisplay> {
+public class AlignmentEditType extends AbstractEditType {
     public AlignmentEditType(DisplayPlugin plugin) {
-        super(plugin, "alignment");
+        super(plugin, "alignment", 1, EntityType.TEXT_DISPLAY);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
-        TextDisplay entity = displayData.getDisplay();
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
+        if (!(displayData.getDisplay() instanceof TextDisplay entity)) return true;
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "alignment"),
@@ -29,7 +28,7 @@ public class AlignmentEditType extends AbstractEditType<TextDisplay> {
         }
 
         try {
-            entity.setAlignment(TextDisplay.TextAlignment.valueOf(value.toUpperCase()));
+            entity.setAlignment(TextDisplay.TextAlignment.valueOf(args[0].toUpperCase()));
             return true;
         }
         catch (IllegalArgumentException ignore) {
@@ -39,9 +38,19 @@ public class AlignmentEditType extends AbstractEditType<TextDisplay> {
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
-        ArrayList<String> list = Utils.getAlignment();
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
+        ArrayList<String> list = getAlignment();
         list.add("?");
+        return list;
+    }
+
+
+
+    private static ArrayList<String> getAlignment() {
+        ArrayList<String> list = new ArrayList<>();
+        for (TextDisplay.TextAlignment alignment : TextDisplay.TextAlignment.values()) {
+            list.add(alignment.name().toLowerCase());
+        }
         return list;
     }
 }

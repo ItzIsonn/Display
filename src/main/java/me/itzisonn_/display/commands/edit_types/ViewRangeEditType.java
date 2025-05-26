@@ -5,23 +5,21 @@ import me.itzisonn_.display.DisplayPlugin;
 import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class ViewRangeEditType extends AbstractMultipleEditType {
+public class ViewRangeEditType extends AbstractEditType {
     public ViewRangeEditType(DisplayPlugin plugin) {
-        super(plugin, "view_range", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
+        super(plugin, "view_range", 1);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
         Display entity = displayData.getDisplay();
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "view_range"),
@@ -30,7 +28,7 @@ public class ViewRangeEditType extends AbstractMultipleEditType {
         }
 
         try {
-            entity.setViewRange(Float.parseFloat(value));
+            entity.setViewRange(Float.parseFloat(args[0]));
             return true;
         }
         catch (IllegalArgumentException ignore) {
@@ -40,7 +38,7 @@ public class ViewRangeEditType extends AbstractMultipleEditType {
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
         return Lists.newArrayList("<range>", "?");
     }
 }

@@ -10,17 +10,17 @@ import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
 
-public class SeeThroughEditType extends AbstractEditType<TextDisplay> {
+public class SeeThroughEditType extends AbstractEditType {
     public SeeThroughEditType(DisplayPlugin plugin) {
-        super(plugin, "see_through");
+        super(plugin, "see_through", 1, EntityType.TEXT_DISPLAY);
     }
 
     @Override
-    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
-        TextDisplay entity = displayData.getDisplay();
+    public boolean onCommand(Player player, DisplayData<?> displayData, String[] args) {
+        if (!(displayData.getDisplay() instanceof TextDisplay entity)) return true;
         int id = displayData.getId();
 
-        if (value.equals("?")) {
+        if (args.length == 1 && args[0].equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "see_through"),
@@ -28,17 +28,17 @@ public class SeeThroughEditType extends AbstractEditType<TextDisplay> {
             return false;
         }
 
-        if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
+        if (!args[0].equalsIgnoreCase("true") && !args[0].equalsIgnoreCase("false")) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
             return false;
         }
 
-        entity.setSeeThrough(Boolean.parseBoolean(value));
+        entity.setSeeThrough(Boolean.parseBoolean(args[0]));
         return true;
     }
 
     @Override
-    public ArrayList<String> onTabComplete(EntityType type) {
+    public ArrayList<String> onTabComplete(Player player, DisplayData<?> displayData, String[] args) {
         return Lists.newArrayList("true", "false", "?");
     }
 }
