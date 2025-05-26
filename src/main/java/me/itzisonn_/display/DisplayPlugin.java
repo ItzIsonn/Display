@@ -79,7 +79,6 @@ public class DisplayPlugin extends JavaPlugin {
                 }
                 else {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        getLogger().log(Level.INFO, "Updating " + parsePlaceholders(player, text));
                         displayProtocolManager.updateFakeText(player, textEntity.getEntityId(), miniMessage.deserialize(parsePlaceholders(player, text)));
                     }
                 }
