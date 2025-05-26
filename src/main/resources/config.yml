@@ -6,6 +6,9 @@
 # Использовать ли PlaceholderAPI
 enablePapi: false
 
+# Использовать ли ProtocolLib
+enableProtocolLib: false
+
 # Как часто будет обновляться текст на Text Display сущностях (в тиках, 0 - не обновлять)
 textUpdateInterval: 20
 

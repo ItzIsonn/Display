@@ -48,7 +48,7 @@ public class TextEditType extends AbstractEditType<TextDisplay> {
                 player.sendMessage(plugin.getConfigManager().getGlobalMessagesSection().getEditingText().getComponent(player,
                                 Placeholder.parsed("id", String.valueOf(id)),
                                 Placeholder.parsed("raw_text", text),
-                                Placeholder.parsed("parsed_text", plugin.parsePlaceholders(player, text))));
+                                Placeholder.parsed("parsed_text", plugin.parsePlaceholders(null, text))));
             }
 
         }

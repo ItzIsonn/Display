@@ -20,6 +20,7 @@ public class ReloadCommand extends AbstractCommand {
         plugin.getConfigManager().reloadConfig();
         plugin.updateMiniMessage();
         plugin.hookPapi();
+        plugin.hookProtocolLib();
         plugin.getScheduler().cancel();
         plugin.startTextUpdating();
 

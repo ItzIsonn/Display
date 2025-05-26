@@ -29,6 +29,7 @@ public class DisplayPlugin extends JavaPlugin {
     private final NamespacedKey nskDisplayText = new NamespacedKey(this, "displayText");
 
     private boolean isHookedPapi = false;
+    private DisplayProtocolManager displayProtocolManager;
     private final DisplayManager displayManager = new DisplayManager(this);
     private final Map<String, Integer> playersEditingMap = new HashMap<>();
     private BukkitTask scheduler;
@@ -47,6 +48,7 @@ public class DisplayPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EventManager(this), this);
 
         hookPapi();
+        hookProtocolLib();
         startTextUpdating();
 
         displayManager.loadDisplays();
@@ -72,7 +74,15 @@ public class DisplayPlugin extends JavaPlugin {
                 String text = data.get(nskDisplayText, PersistentDataType.STRING);
                 if (text == null) continue;
 
-                textEntity.text(miniMessage.deserialize(parsePlaceholders(null, text)));
+                if (displayProtocolManager == null) {
+                    textEntity.text(miniMessage.deserialize(parsePlaceholders(null, text)));
+                }
+                else {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        getLogger().log(Level.INFO, "Updating " + parsePlaceholders(player, text));
+                        displayProtocolManager.updateFakeText(player, textEntity.getEntityId(), miniMessage.deserialize(parsePlaceholders(player, text)));
+                    }
+                }
             }
         }, 0, interval);
     }
@@ -91,6 +101,18 @@ public class DisplayPlugin extends JavaPlugin {
                 isHookedPapi = true;
             }
             else getLogger().log(Level.SEVERE, "Can't find PlaceholderAPI plugin!");
+        }
+    }
+
+    public void hookProtocolLib() {
+        displayProtocolManager = null;
+
+        if (configManager.getGlobalSection().isProtocolLibEnabled()) {
+            if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+                getLogger().log(Level.INFO, "Successfully hooked into ProtocolLib!");
+                displayProtocolManager = new DisplayProtocolManager();
+            }
+            else getLogger().log(Level.SEVERE, "Can't find ProtocolLib plugin!");
         }
     }
 
