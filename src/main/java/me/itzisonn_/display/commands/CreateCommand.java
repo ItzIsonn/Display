@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,8 +13,8 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 
-public class CreateSubcommand extends AbstractSubcommand {
-    public CreateSubcommand(DisplayPlugin plugin) {
+public class CreateCommand extends AbstractCommand {
+    public CreateCommand(DisplayPlugin plugin) {
         super(plugin, "create");
     }
 
@@ -51,7 +52,7 @@ public class CreateSubcommand extends AbstractSubcommand {
 
 
         if (args[0].equalsIgnoreCase("clone")) {
-            if (plugin.getDisplaysMap().containsKey(id)) {
+            if (plugin.getDisplayManager().has(id)) {
                 player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
                 return;
             }
@@ -69,9 +70,15 @@ public class CreateSubcommand extends AbstractSubcommand {
                 player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidId().getComponent(player, args[2]));
                 return;
             }
-            Display cloneEntity = plugin.getDisplaysMap().get(cloneId);
 
-            if (!plugin.getDisplaysMap().containsKey(cloneId) || cloneEntity.isDead()) {
+            DisplayData<?> cloneEntityData = plugin.getDisplayManager().get(cloneId);
+            if (cloneEntityData == null) {
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
+                return;
+            }
+
+            Display cloneEntity = cloneEntityData.getDisplay();
+            if (cloneEntity.isDead()) {
                 player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
                 return;
             }
@@ -134,7 +141,7 @@ public class CreateSubcommand extends AbstractSubcommand {
             entity.setShadowStrength(cloneEntity.getShadowStrength());
             entity.setViewRange(cloneEntity.getViewRange());
 
-            plugin.getDisplaysMap().put(id, entity);
+            plugin.getDisplayManager().add(id, entity);
             PersistentDataContainer data = entity.getPersistentDataContainer();
             data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 
@@ -142,12 +149,14 @@ public class CreateSubcommand extends AbstractSubcommand {
             return;
         }
 
+
+
         if (args.length > 2) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getTooManyArguments().getComponent(player));
             return;
         }
 
-        if (plugin.getDisplaysMap().containsKey(id)) {
+        if (plugin.getDisplayManager().has(id)) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
             return;
         }
@@ -189,7 +198,7 @@ public class CreateSubcommand extends AbstractSubcommand {
             return;
         }
 
-        plugin.getDisplaysMap().put(id, entity);
+        plugin.getDisplayManager().add(id, entity);
         PersistentDataContainer data = entity.getPersistentDataContainer();
         data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 

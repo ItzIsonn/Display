@@ -1,28 +1,30 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Color;
-import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class BackgroundEditType extends AbstractEditType {
+public class BackgroundEditType extends AbstractEditType<TextDisplay> {
     public BackgroundEditType(DisplayPlugin plugin) {
-        super(plugin, "background", Set.of(EntityType.TEXT_DISPLAY));
+        super(plugin, "background");
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
+        TextDisplay entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
-            String infoValue = ((TextDisplay) entity).getBackgroundColor() == null ? "255,255,255" :
-                    ((TextDisplay) entity).getBackgroundColor().getRed() + "," + ((TextDisplay) entity).getBackgroundColor().getGreen() + "," + ((TextDisplay) entity).getBackgroundColor().getBlue();
+            String infoValue = entity.getBackgroundColor() == null ? "255,255,255" :
+                    entity.getBackgroundColor().getRed() + "," + entity.getBackgroundColor().getGreen() + "," + entity.getBackgroundColor().getBlue();
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "background"),
@@ -37,7 +39,7 @@ public class BackgroundEditType extends AbstractEditType {
         }
 
         try {
-            ((TextDisplay) entity).setBackgroundColor(Color.fromRGB(Integer.parseInt(color[0]), Integer.parseInt(color[1]), Integer.parseInt(color[2])));
+            entity.setBackgroundColor(Color.fromRGB(Integer.parseInt(color[0]), Integer.parseInt(color[1]), Integer.parseInt(color[2])));
             return true;
         }
         catch (NumberFormatException ignore) {

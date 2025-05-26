@@ -1,12 +1,12 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import me.itzisonn_.display.DisplayPlugin;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class HelpSubcommand extends AbstractSubcommand {
-    public HelpSubcommand(DisplayPlugin plugin) {
+public class HelpCommand extends AbstractCommand {
+    public HelpCommand(DisplayPlugin plugin) {
         super(plugin, "help");
     }
 

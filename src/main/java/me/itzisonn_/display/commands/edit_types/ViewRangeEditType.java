@@ -1,33 +1,36 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
+import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
-import me.itzisonn_.display.Utils;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-public class AlignmentEditType extends AbstractEditType {
-    public AlignmentEditType(DisplayPlugin plugin) {
-        super(plugin, "alignment", Set.of(EntityType.TEXT_DISPLAY));
+public class ViewRangeEditType extends AbstractMultipleEditType {
+    public ViewRangeEditType(DisplayPlugin plugin) {
+        super(plugin, "view_range", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+        Display entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
-                    Placeholder.parsed("type", "alignment"),
-                    Placeholder.parsed("value", ((TextDisplay) entity).getAlignment().name())));
+                    Placeholder.parsed("type", "view_range"),
+                    Placeholder.parsed("value", String.valueOf(entity.getViewRange()))));
             return false;
         }
 
         try {
-            ((TextDisplay) entity).setAlignment(TextDisplay.TextAlignment.valueOf(value.toUpperCase()));
+            entity.setViewRange(Float.parseFloat(value));
             return true;
         }
         catch (IllegalArgumentException ignore) {
@@ -38,8 +41,6 @@ public class AlignmentEditType extends AbstractEditType {
 
     @Override
     public ArrayList<String> onTabComplete(EntityType type) {
-        ArrayList<String> list = Utils.getAlignment();
-        list.add("?");
-        return list;
+        return Lists.newArrayList("<range>", "?");
     }
 }

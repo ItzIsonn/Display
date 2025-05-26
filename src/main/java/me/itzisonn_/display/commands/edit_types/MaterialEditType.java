@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import me.itzisonn_.display.DisplayPlugin;
 import me.itzisonn_.display.Utils;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,13 +12,16 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class MaterialEditType extends AbstractEditType {
+public class MaterialEditType extends AbstractMultipleEditType {
     public MaterialEditType(DisplayPlugin plugin) {
         super(plugin, "material", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY));
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+        Display entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
             String infoValue = "?";
             if (entity instanceof BlockDisplay blockDisplay) infoValue = blockDisplay.getBlock().getMaterial().toString();

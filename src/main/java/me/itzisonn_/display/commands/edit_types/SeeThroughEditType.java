@@ -1,28 +1,30 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
-import java.util.Set;
 
-public class SeeThroughEditType extends AbstractEditType {
+public class SeeThroughEditType extends AbstractEditType<TextDisplay> {
     public SeeThroughEditType(DisplayPlugin plugin) {
-        super(plugin, "see_through", Set.of(EntityType.TEXT_DISPLAY));
+        super(plugin, "see_through");
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<TextDisplay> displayData) {
+        TextDisplay entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getEditInfo().getComponent(player,
                     Placeholder.parsed("id", String.valueOf(id)),
                     Placeholder.parsed("type", "see_through"),
-                    Placeholder.parsed("value", String.valueOf(((TextDisplay) entity).isSeeThrough()))));
+                    Placeholder.parsed("value", String.valueOf(entity.isSeeThrough()))));
             return false;
         }
 
@@ -31,7 +33,7 @@ public class SeeThroughEditType extends AbstractEditType {
             return false;
         }
 
-        ((TextDisplay) entity).setSeeThrough(Boolean.parseBoolean(value));
+        entity.setSeeThrough(Boolean.parseBoolean(value));
         return true;
     }
 

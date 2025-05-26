@@ -1,4 +1,4 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
@@ -14,8 +14,8 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class LoadSubcommand extends AbstractSubcommand {
-    public LoadSubcommand(DisplayPlugin plugin) {
+public class LoadCommand extends AbstractCommand {
+    public LoadCommand(DisplayPlugin plugin) {
         super(plugin, "load");
     }
 
@@ -45,7 +45,7 @@ public class LoadSubcommand extends AbstractSubcommand {
             return;
         }
 
-        if (plugin.getDisplaysMap().containsKey(id)) {
+        if (plugin.getDisplayManager().has(id)) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdAlreadyInUse().getComponent(player, id));
             return;
         }
@@ -64,12 +64,12 @@ public class LoadSubcommand extends AbstractSubcommand {
             return;
         }
 
-        if (plugin.getDisplaysMap().containsValue(display)) {
+        if (plugin.getDisplayManager().has(display.getUniqueId())) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getEntityAlreadyInUse().getComponent(player, id));
             return;
         }
 
-        plugin.getDisplaysMap().put(id, display);
+        plugin.getDisplayManager().add(id, display);
         PersistentDataContainer data = display.getPersistentDataContainer();
         data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, id);
 

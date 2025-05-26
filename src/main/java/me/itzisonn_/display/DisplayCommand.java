@@ -1,6 +1,6 @@
 package me.itzisonn_.display;
 
-import me.itzisonn_.display.subcommands.*;
+import me.itzisonn_.display.commands.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class DisplayCommand implements CommandExecutor, TabCompleter {
     private final DisplayPlugin plugin;
-    private final Set<AbstractSubcommand> subcommands;
+    private final Set<AbstractCommand> subcommands;
 
     public DisplayCommand(DisplayPlugin plugin) {
         PluginCommand pluginCommand = plugin.getCommand("display");
@@ -21,14 +21,14 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
 
         this.plugin = plugin;
         subcommands = Set.of(
-                new HelpSubcommand(plugin),
-                new ReloadSubcommand(plugin),
-                new CreateSubcommand(plugin),
-                new LoadSubcommand(plugin),
-                new DeleteSubcommand(plugin),
-                new ListSubcommand(plugin),
-                new EditSubcommand(plugin),
-                new TpSubcommand(plugin));
+                new HelpCommand(plugin),
+                new ReloadCommand(plugin),
+                new CreateCommand(plugin),
+                new LoadCommand(plugin),
+                new DeleteCommand(plugin),
+                new ListCommand(plugin),
+                new EditCommand(plugin),
+                new TpCommand(plugin));
     }
 
 
@@ -41,7 +41,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!player.hasPermission("display.*")) {
-            for (AbstractSubcommand subcommand : subcommands) {
+            for (AbstractCommand subcommand : subcommands) {
                 if (player.hasPermission("display." + subcommand.getName())) break;
             }
 
@@ -54,7 +54,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        for (AbstractSubcommand subcommand : subcommands) {
+        for (AbstractCommand subcommand : subcommands) {
             if (args[0].equalsIgnoreCase(subcommand.getName())) {
                 if (!player.hasPermission("display.*") && !player.hasPermission("display." + subcommand.getName())) {
                     player.sendMessage(plugin.getConfigManager().getErrorsSection().getUnknownAction().getComponent(player));
@@ -91,7 +91,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             List<String> arrayList = new ArrayList<>();
 
-            for (AbstractSubcommand subcommand : subcommands) {
+            for (AbstractCommand subcommand : subcommands) {
                 if (player.hasPermission("display." + subcommand.getName()) || player.hasPermission("display.*"))
                     arrayList.add(subcommand.getName());
             }
@@ -99,7 +99,7 @@ public class DisplayCommand implements CommandExecutor, TabCompleter {
             return arrayList;
         }
 
-        for (AbstractSubcommand subcommand : subcommands) {
+        for (AbstractCommand subcommand : subcommands) {
             if (args[0].equalsIgnoreCase(subcommand.getName())) {
                 if (player.hasPermission("display." + subcommand.getName()) || player.hasPermission("display.*"))
                     return subcommand.onTabComplete(player, Arrays.copyOfRange(args, 1, args.length));

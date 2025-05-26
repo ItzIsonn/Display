@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Color;
 import org.bukkit.entity.*;
@@ -9,13 +10,16 @@ import org.bukkit.entity.*;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class GlowingEditType extends AbstractEditType {
+public class GlowingEditType extends AbstractMultipleEditType {
     public GlowingEditType(DisplayPlugin plugin) {
         super(plugin, "glowing", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY));
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+        Display entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
             String infoValue = entity.getGlowColorOverride() == null ? "255,255,255" :
                     entity.getGlowColorOverride().getRed() + "," + entity.getGlowColorOverride().getGreen() + "," + entity.getGlowColorOverride().getBlue();

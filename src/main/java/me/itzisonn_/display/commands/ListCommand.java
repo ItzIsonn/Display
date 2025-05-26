@@ -1,15 +1,15 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class ListSubcommand extends AbstractSubcommand {
-    public ListSubcommand(DisplayPlugin plugin) {
+public class ListCommand extends AbstractCommand {
+    public ListCommand(DisplayPlugin plugin) {
         super(plugin, "list");
     }
 
@@ -20,21 +20,18 @@ public class ListSubcommand extends AbstractSubcommand {
             return;
         }
 
-
-        if (plugin.getDisplaysMap().isEmpty()) {
+        if (plugin.getDisplayManager().getAll().isEmpty()) {
             player.sendMessage(plugin.getConfigManager().getListSection().getEmpty().getComponent(player));
             return;
         }
 
         player.sendMessage(plugin.getConfigManager().getListSection().getTitle().getComponent(player));
         int pos = 1;
-        for (int id : plugin.getDisplaysMap().keySet()) {
-            Display entity = plugin.getDisplaysMap().get(id);
-
+        for (DisplayData<?> displayData : plugin.getDisplayManager().getAll()) {
             Component component = plugin.getConfigManager().getListSection().getFormat().getComponent(player,
                     Placeholder.parsed("pos", String.valueOf(pos)),
-                    Placeholder.parsed("type", entity.getType().name()),
-                    Placeholder.parsed("id", String.valueOf(id))
+                    Placeholder.parsed("type", displayData.getDisplay().getType().name()),
+                    Placeholder.parsed("id", String.valueOf(displayData.getId()))
             );
             player.sendMessage(component);
 

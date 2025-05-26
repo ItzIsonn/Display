@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,24 +12,23 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class IdEditType extends AbstractEditType {
+public class IdEditType extends AbstractMultipleEditType {
     public IdEditType(DisplayPlugin plugin) {
         super(plugin, "id", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
         try {
             int newId = Integer.parseInt(value);
-            plugin.getDisplaysMap().remove(id);
-            plugin.getDisplaysMap().put(newId, entity);
+            displayData.setId(newId);
 
-            PersistentDataContainer data = entity.getPersistentDataContainer();
+            PersistentDataContainer data = displayData.getDisplay().getPersistentDataContainer();
             data.set(plugin.getNskDisplayId(), PersistentDataType.INTEGER, newId);
             return true;
         }
         catch (NumberFormatException ignore) {
-            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, id));
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getInvalidEditValue().getComponent(player, displayData.getId()));
             return false;
         }
     }

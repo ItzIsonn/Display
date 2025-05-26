@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands.edit_types;
+package me.itzisonn_.display.commands.edit_types;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -15,13 +16,16 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class RotationEditType extends AbstractEditType {
+public class RotationEditType extends AbstractMultipleEditType {
     public RotationEditType(DisplayPlugin plugin) {
         super(plugin, "rotation", Set.of(EntityType.BLOCK_DISPLAY, EntityType.ITEM_DISPLAY, EntityType.TEXT_DISPLAY));
     }
 
     @Override
-    public boolean onCommand(Player player, String value, Display entity, int id) {
+    public boolean onCommand(Player player, String value, DisplayData<Display> displayData) {
+        Display entity = displayData.getDisplay();
+        int id = displayData.getId();
+
         if (value.equals("?")) {
             Vector3f rotation = entity.getTransformation().getLeftRotation().getEulerAnglesXYZ(new Vector3f());
 

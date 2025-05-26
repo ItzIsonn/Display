@@ -1,12 +1,12 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import me.itzisonn_.display.DisplayPlugin;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class ReloadSubcommand extends AbstractSubcommand {
-    public ReloadSubcommand(DisplayPlugin plugin) {
+public class ReloadCommand extends AbstractCommand {
+    public ReloadCommand(DisplayPlugin plugin) {
         super(plugin, "reload");
     }
 

@@ -1,13 +1,14 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import me.itzisonn_.display.DisplayPlugin;
-import org.bukkit.entity.Entity;
+import me.itzisonn_.display.manager.DisplayData;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class DeleteSubcommand extends AbstractSubcommand {
-    public DeleteSubcommand(DisplayPlugin plugin) {
+public class DeleteCommand extends AbstractCommand {
+    public DeleteCommand(DisplayPlugin plugin) {
         super(plugin, "delete");
     }
 
@@ -24,11 +25,11 @@ public class DeleteSubcommand extends AbstractSubcommand {
         }
 
         if (args[0].equals("*")) {
-            for (int id : plugin.getDisplaysMap().keySet()) {
-                Entity entity = plugin.getDisplaysMap().get(id);
+            for (DisplayData<?> displayData : plugin.getDisplayManager().getAll()) {
+                Display entity = displayData.getDisplay();
                 entity.remove();
+                plugin.getDisplayManager().remove(displayData.getId());
             }
-            plugin.getDisplaysMap().clear();
 
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getDeleteAll().getComponent(player));
         }
@@ -42,15 +43,20 @@ public class DeleteSubcommand extends AbstractSubcommand {
                 return;
             }
 
-            Entity entity = plugin.getDisplaysMap().get(id);
+            DisplayData<?> displayData = plugin.getDisplayManager().get(id);
+            if (displayData == null) {
+                player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
+                return;
+            }
 
-            if (!plugin.getDisplaysMap().containsKey(id) || entity.isDead()) {
+            Display entity = displayData.getDisplay();
+            if (entity.isDead()) {
                 player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
                 return;
             }
 
             entity.remove();
-            plugin.getDisplaysMap().remove(id);
+            plugin.getDisplayManager().remove(id);
 
             player.sendMessage(plugin.getConfigManager().getSuccessfullySection().getDeleteId().getComponent(player, String.valueOf(id)));
         }

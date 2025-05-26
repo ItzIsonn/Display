@@ -1,17 +1,18 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import lombok.Getter;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
 @Getter
-public abstract class AbstractSubcommand {
+public abstract class AbstractCommand {
     protected final DisplayPlugin plugin;
     protected final String name;
 
-    protected AbstractSubcommand(DisplayPlugin plugin, String name) {
+    protected AbstractCommand(DisplayPlugin plugin, String name) {
         this.plugin = plugin;
         this.name = name;
     }
@@ -21,8 +22,8 @@ public abstract class AbstractSubcommand {
 
     protected ArrayList<String> getIDs() {
         ArrayList<String> ids = new ArrayList<>();
-        for (int id : plugin.getDisplaysMap().keySet()) {
-            ids.add(String.valueOf(id));
+        for (DisplayData<?> displayData : plugin.getDisplayManager().getAll()) {
+            ids.add(String.valueOf(displayData.getId()));
         }
 
         return ids;

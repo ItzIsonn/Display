@@ -1,7 +1,8 @@
-package me.itzisonn_.display.subcommands;
+package me.itzisonn_.display.commands;
 
 import com.google.common.collect.Lists;
 import me.itzisonn_.display.DisplayPlugin;
+import me.itzisonn_.display.manager.DisplayData;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,8 +12,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class TpSubcommand extends AbstractSubcommand {
-    public TpSubcommand(DisplayPlugin plugin) {
+public class TpCommand extends AbstractCommand {
+    public TpCommand(DisplayPlugin plugin) {
         super(plugin, "tp");
     }
 
@@ -37,9 +38,14 @@ public class TpSubcommand extends AbstractSubcommand {
             return;
         }
 
-        Display entity = plugin.getDisplaysMap().get(id);
+        DisplayData<?> displayData = plugin.getDisplayManager().get(id);
+        if (displayData == null) {
+            player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
+            return;
+        }
 
-        if (!plugin.getDisplaysMap().containsKey(id) || entity.isDead()) {
+        Display entity = displayData.getDisplay();
+        if (entity.isDead()) {
             player.sendMessage(plugin.getConfigManager().getErrorsSection().getIdDoesNotExist().getComponent(player, id));
             return;
         }

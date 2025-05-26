@@ -1,9 +1,11 @@
 package me.itzisonn_.display;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import me.itzisonn_.display.manager.DisplayData;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -26,11 +28,11 @@ public class EventManager implements Listener {
 
             PersistentDataContainer data = entity.getPersistentDataContainer();
             if (!data.has(plugin.getNskDisplayId(), PersistentDataType.INTEGER)) continue;
+
             Integer id = data.get(plugin.getNskDisplayId(), PersistentDataType.INTEGER);
+            if (id == null) continue;
 
-            if (plugin.getDisplaysMap().containsValue(entity)) continue;
-
-            plugin.getDisplaysMap().put(id, entity);
+            plugin.getDisplayManager().addIfAbsent(id, entity);
             plugin.getLogger().log(Level.INFO, "Loaded entity with ID " + id);
         }
     }
@@ -43,7 +45,9 @@ public class EventManager implements Listener {
         e.setCancelled(true);
 
         String message = plugin.getMiniMessage().serialize(e.originalMessage()).replaceAll("\\\\<", "<");
-        Entity entity = plugin.getDisplaysMap().get(plugin.getPlayersEditingMap().get(player.getUniqueId().toString()));
+
+        DisplayData<?> displayData = plugin.getDisplayManager().get(plugin.getPlayersEditingMap().get(player.getUniqueId().toString()));
+        if (!(displayData.getDisplay() instanceof TextDisplay entity)) return;
 
         PersistentDataContainer data = entity.getPersistentDataContainer();
         data.set(plugin.getNskDisplayText(), PersistentDataType.STRING, message);
